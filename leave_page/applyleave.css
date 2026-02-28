@@ -1,0 +1,83 @@
+/* ... (Keep previous styles for modal, body, inputs) ... */
+
+:root {
+    --primary: #FF5B1E;
+    --primary-hover: #e04a14;
+    --dark: #1E1E2D;
+    --text: #3F4254;
+    --border: #E5E7EB;
+    --bg-overlay: rgba(0, 0, 0, 0.6);
+    --danger: #F1416C;
+}
+
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+body { background: #f3f4f6; }
+
+/* ... (Keep Main container, Modal, Input styles from previous response) ... */
+
+.main-container { height: 100vh; display: flex; justify-content: center; align-items: center; }
+.btn-trigger { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-overlay); z-index: 999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+.modal-overlay.active { display: flex; }
+.modal-box { background: white; width: 500px; border-radius: 12px; overflow: hidden; animation: zoomIn 0.3s ease; }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-header { padding: 20px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 18px; font-weight: 600; color: var(--dark); }
+.close-icon { background: #f5f5f5; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #888; }
+.modal-body { padding: 25px; }
+.form-group { margin-bottom: 20px; }
+.form-row { display: flex; gap: 20px; }
+.half { flex: 1; }
+label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.req { color: var(--danger); }
+.form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; color: var(--dark); transition: 0.2s; }
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 91, 30, 0.1); }
+.form-control.readonly { background: #F9F9F9; pointer-events: none; border-color: #eee; }
+.form-control.highlight { color: var(--primary); font-weight: 700; }
+.modal-footer { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+.btn-cancel { background: white; border: 1px solid var(--border); padding: 10px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; }
+.btn-submit { background: var(--primary); border: none; padding: 10px 40px; border-radius: 50px; font-weight: 600; color: white; cursor: pointer; }
+
+/* --- NEW STYLES FOR TOAST & ERROR --- */
+
+/* Error state for inputs */
+.form-control.input-error {
+    border-color: var(--danger);
+    background-color: #FFF5F8;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Custom Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px); /* Start hidden below */
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 2000;
+}
+
+.toast i { color: var(--danger); font-size: 18px; }
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.success i { color: #50CD89; }

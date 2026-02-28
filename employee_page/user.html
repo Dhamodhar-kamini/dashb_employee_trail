@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+
+    <div class="app-layout">
+        
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    
+    <!-- 1. NEW LOGO SECTION -->
+    <div class="sidebar-logo">
+      <!-- Replace src with your actual logo URL -->
+      <img src="../assets/opptylogo.png" alt="Company Logo">
+    </div>
+
+    <!-- User Profile -->
+    <div class="header-profile">
+      <div class="user-name">Dhamodhar</div>
+      <div class="user-role">Admin</div>
+    </div>
+    
+    <!-- Toggle Button -->
+    <button id="sidebarToggle" class="sidebar-toggle">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-content">
+    <ul class="sidebar-menu">
+      
+      <!-- Dashboard -->
+      <li class="menu-item active">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-solid fa-table-columns"></i>
+            <span>Dashboard</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Employees -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-regular fa-user"></i>
+            <span>Employees</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Attendance -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Attendance</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Daily Task -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-regular fa-square-check"></i>
+            <span>Daily Task</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Task -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Task</span>
+          </div>
+        </a>
+      </li>
+
+
+      <!-- Payslip -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Payslip</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Leaves -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <span>Leaves</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Manage Leave -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-regular fa-calendar-check"></i>
+            <span>Manage Leave</span>
+          </div>
+        </a>
+      </li>
+
+      <!-- Asset Allocation -->
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <div class="link-left">
+            <i class="fa-solid fa-phone"></i>
+            <span>Asset Allocation</span>
+          </div>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</aside>
+        <!-- MAIN CONTENT (Your Existing Code Wrapped) -->
+        <main class="main-content" id="mainContent">
+            
+            <div class="container">
+                <!-- Header -->
+                <header class="page-header">
+                    <div class="flex items-center gap-10">
+                        <!-- Mobile Menu Button -->
+                        <button id="mobileMenuBtn" class="mobile-menu-btn">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        
+                        <div class="page-title">
+                            <h1>Employee Dashboard</h1>
+                            <div class="breadcrumbs">
+                                <i class="fa-solid fa-house"></i> > Dashboard > Employee Dashboard
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-10 header-actions">
+                        <button class="btn btn-outline"><i class="fa-solid fa-file-export"></i> Export</button>
+                        <button class="btn btn-outline"><i class="fa-solid fa-calendar"></i> 15-04-2025</button>
+                    </div>
+                </header>
+
+                <!-- ROW 1: Profile, Leave Chart, Leave Stats -->
+                <div class="grid-row grid-3">
+                    <!-- Profile -->
+                    <div class="card profile-card">
+                        <div class="profile-header">
+                            <img src="https://i.pravatar.cc/150?img=11" class="profile-img" alt="User">
+                            <div>
+                                <div class="fw-bold" style="font-size: 15px;">Stephan Peralt</div>
+                                <div style="font-size: 11px; opacity: 0.8;">Senior Product Designer • UI/UX Design</div>
+                            </div>
+                        </div>
+                        <div class="profile-body">
+                            <div class="info-row">
+                                <span class="info-label">Phone Number</span>
+                                <div class="info-val">+1 324 3453 545</div>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Email Address</span>
+                                <div class="info-val">steperde124@example.com</div>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Report Office</span>
+                                <div class="info-val">Doglas Martini</div>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Joined on</span>
+                                <div class="info-val">15 Jan 2024</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leave Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Leave Details</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
+                        </div>
+                        <div class="flex items-center">
+                            <div style="flex:1">
+                                <ul class="leave-legend">
+                                    <li><span class="dot" style="background:#000;"></span> <b>1254</b> on time</li>
+                                    <li><span class="dot" style="background:#28a745;"></span> <b>32</b> Late Attendance</li>
+                                    <li><span class="dot" style="background:#FF5B1E;"></span> <b>658</b> Work From Home</li>
+                                    <li><span class="dot" style="background:#dc3545;"></span> <b>14</b> Absent</li>
+                                    <li><span class="dot" style="background:#ffc107;"></span> <b>68</b> Sick Leave</li>
+                                </ul>
+                                <div style="margin-top: 15px; font-size: 11px; color: var(--text-muted);">
+                                    <i class="fa-solid fa-square-check" style="color: var(--primary);"></i> Better than 85% of Employees
+                                </div>
+                            </div>
+                            <div class="chart-wrap">
+                                <canvas id="leaveChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leave Stats -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Leave Details</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <span>Total Leaves</span>
+                                <h4>16</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Taken</span>
+                                <h4>10</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Absent</span>
+                                <h4>2</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Request</span>
+                                <h4>0</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Worked Days</span>
+                                <h4>240</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Loss of Pay</span>
+                                <h4>2</h4>
+                            </div>
+                        </div>
+                        <button class="btn btn-dark" style="width: 100%;">Apply New Leave</button>
+                    </div>
+                </div>
+
+                <!-- ROW 2: Attendance, Hours, Timeline -->
+                <div class="grid-row grid-attend">
+    <!-- Attendance Card -->
+    <div class="card attendance-card">
+        <div class="text-muted">Attendance</div>
+        <!-- Added ID for dynamic date -->
+        <div class="fw-bold" style="font-size: 16px;" id="currentDateDisplay">--:-- --, -- --- ----</div>
+        
+        <div class="timer-circle">
+            <!-- Canvas for chart (optional, kept structure) -->
+            <canvas id="attendanceChart" width="100" height="100"></canvas> 
+            
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 10px; color: #888;">Total Hours</div>
+                <!-- Added ID to update this text -->
+                <div id="timerDisplay" style="font-size: 18px; font-weight: 700;">00:00:00</div>
+            </div>
+        </div>
+
+        <!-- Added ID to update production hours -->
+        <div id="productionDisplay" class="badge badge-dark" style="background: #222; color: white; margin-bottom: 10px;">
+            Production : 0.00 hrs
+        </div>
+        
+        <!-- Added ID to update status message -->
+        <div id="punchStatusMsg" style="font-size: 11px; color: var(--primary); margin-bottom: 15px;">
+            <i class="fa-solid fa-fingerprint"></i> Not punched in yet
+        </div>
+        
+        <!-- Added ID to button -->
+        <button id="punchBtn" class="punch-btn">Punch In</button>
+    </div>
+</div>
+
+                    <!-- Right Side: Stats & Timeline -->
+                    <div>
+                        <!-- 4 Small Cards -->
+                        <div class="small-stat-cards">
+                            <div class="card">
+                                <i class="fa-solid fa-clock" style="color: #FF5B1E; margin-bottom: 5px;"></i>
+                                <div style="font-size: 20px; font-weight: 600;">8.36 <span style="font-size: 12px; color:#999;">/ 9</span></div>
+                                <div class="text-muted">Total Hours Today</div>
+                                <div class="text-success" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-up"></i> 5% This Week</div>
+                            </div>
+                            <div class="card">
+                                <i class="fa-solid fa-calendar-week" style="color: #333; margin-bottom: 5px;"></i>
+                                <div style="font-size: 20px; font-weight: 600;">10 <span style="font-size: 12px; color:#999;">/ 40</span></div>
+                                <div class="text-muted">Total Hours Week</div>
+                                <div class="text-success" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-up"></i> 7% Last Week</div>
+                            </div>
+                            <div class="card">
+                                <i class="fa-solid fa-calendar-days" style="color: #007bff; margin-bottom: 5px;"></i>
+                                <div style="font-size: 20px; font-weight: 600;">75 <span style="font-size: 12px; color:#999;">/ 98</span></div>
+                                <div class="text-muted">Total Hours Month</div>
+                                <div class="text-danger" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-down"></i> 8% Last Month</div>
+                            </div>
+                            <div class="card">
+                                <i class="fa-solid fa-briefcase" style="color: #dc3545; margin-bottom: 5px;"></i>
+                                <div style="font-size: 20px; font-weight: 600;">16 <span style="font-size: 12px; color:#999;">/ 28</span></div>
+                                <div class="text-muted">Overtime this Month</div>
+                                <div class="text-danger" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-down"></i> 6% Last Month</div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Chart -->
+                        <div class="card">
+                            <div class="flex justify-between" style="margin-bottom: 10px;">
+                                <div>
+                                    <span class="dot" style="background:#ddd;"></span> Total Working hours
+                                    <div class="fw-bold" style="font-size: 16px;">12h 36m</div>
+                                </div>
+                                <div>
+                                    <span class="dot" style="background:#00c853;"></span> Productive Hours
+                                    <div class="fw-bold" style="font-size: 16px;">08h 36m</div>
+                                </div>
+                                <div>
+                                    <span class="dot" style="background:#ffc107;"></span> Break hours
+                                    <div class="fw-bold" style="font-size: 16px;">22m 15s</div>
+                                </div>
+                                <div>
+                                    <span class="dot" style="background:#007bff;"></span> Overtime
+                                    <div class="fw-bold" style="font-size: 16px;">02h 15m</div>
+                                </div>
+                            </div>
+                            <div class="time-bar">
+                                <!-- Simulated Chart Segments -->
+                                <div class="tb-seg" style="width: 10%; background: transparent;"></div>
+                                <div class="tb-seg" style="width: 20%; background: #00c853;"></div>
+                                <div class="tb-seg" style="width: 5%; background: #ffc107;"></div>
+                                <div class="tb-seg" style="width: 30%; background: #00c853;"></div>
+                                <div class="tb-seg" style="width: 15%; background: #ffc107;"></div>
+                                <div class="tb-seg" style="width: 15%; background: #00c853;"></div>
+                                <div class="tb-seg" style="width: 5%; background: #ffc107;"></div>
+                                <div class="tb-seg" style="width: 5%; background: #007bff;"></div>
+                            </div>
+                            <div class="flex justify-between text-muted" style="margin-top: 5px; font-size: 10px;">
+                                <span>06:00</span> <span>08:00</span> <span>10:00</span> <span>12:00</span> <span>02:00</span> <span>04:00</span> <span>06:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 3: Projects & Tasks -->
+                <div class="grid-row grid-2">
+                    <!-- Projects -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Projects</span>
+                            <span class="text-muted">Ongoing Projects <i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                        <div class="flex gap-20">
+                            <!-- Project 1 -->
+                            <div class="project-card" style="flex:1;">
+                                <div class="flex justify-between items-center" style="margin-bottom: 10px;">
+                                    <span class="fw-bold">Office Management</span>
+                                    <i class="fa-solid fa-ellipsis-vertical text-muted"></i>
+                                </div>
+                                <div class="list-item" style="border:none; padding: 0 0 10px 0;">
+                                    <img src="https://i.pravatar.cc/150?img=12" style="width:30px; height:30px; border-radius:50%;" alt="">
+                                    <div>
+                                        <div style="font-size:12px; font-weight:600;">Anthony Lewis</div>
+                                        <div style="font-size:10px;" class="text-muted">Project Leader</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center" style="font-size:11px; margin-top: 5px;">
+                                    <span class="badge badge-light-success"><i class="fa-regular fa-calendar"></i> 14 Jan 2024</span>
+                                    <span class="text-muted">Deadline</span>
+                                </div>
+                                <div class="flex justify-between items-center" style="margin-top: 15px;">
+                                    <div style="font-size:11px;">Tasks: 6/10</div>
+                                    <div class="avatars">
+                                        <img src="https://i.pravatar.cc/150?img=3"><img src="https://i.pravatar.cc/150?img=4"><div style="width:25px; height:25px; border-radius:50%; background:#FF5B1E; color:white; font-size:9px; display:flex; justify-content:center; align-items:center; border:2px solid white; margin-left:-8px;">+2</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 11px; background:#e0e0e0; padding: 5px; border-radius: 4px; display:flex; justify-content:space-between;">
+                                    <span>Time Spent</span> <span><b>65/120</b> Hrs</span>
+                                </div>
+                            </div>
+                            <!-- Project 2 -->
+                            <div class="project-card" style="flex:1;">
+                                <div class="flex justify-between items-center" style="margin-bottom: 10px;">
+                                    <span class="fw-bold">Office Management</span>
+                                    <i class="fa-solid fa-ellipsis-vertical text-muted"></i>
+                                </div>
+                                <div class="list-item" style="border:none; padding: 0 0 10px 0;">
+                                    <img src="https://i.pravatar.cc/150?img=12" style="width:30px; height:30px; border-radius:50%;" alt="">
+                                    <div>
+                                        <div style="font-size:12px; font-weight:600;">Anthony Lewis</div>
+                                        <div style="font-size:10px;" class="text-muted">Project Leader</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center" style="font-size:11px; margin-top: 5px;">
+                                    <span class="badge badge-light-primary"><i class="fa-regular fa-calendar"></i> 14 Jan 2024</span>
+                                    <span class="text-muted">Deadline</span>
+                                </div>
+                                <div class="flex justify-between items-center" style="margin-top: 15px;">
+                                    <div style="font-size:11px;">Tasks: 6/10</div>
+                                    <div class="avatars">
+                                        <img src="https://i.pravatar.cc/150?img=5"><img src="https://i.pravatar.cc/150?img=6"><div style="width:25px; height:25px; border-radius:50%; background:#FF5B1E; color:white; font-size:9px; display:flex; justify-content:center; align-items:center; border:2px solid white; margin-left:-8px;">+2</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 11px; background:#e0e0e0; padding: 5px; border-radius: 4px; display:flex; justify-content:space-between;">
+                                    <span>Time Spent</span> <span><b>65/120</b> Hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Tasks</span>
+                            <span class="text-muted">All Projects <i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                        <div class="task-list">
+                            <div class="task-item">
+                                <div class="task-left">
+                                    <i class="fa-solid fa-grip-vertical text-muted"></i>
+                                    <input type="checkbox">
+                                    <i class="fa-solid fa-star star"></i>
+                                    <span class="fw-bold">Patient appointment booking</span>
+                                </div>
+                                <div class="flex items-center gap-10">
+                                    <span class="badge badge-light-danger">Onhold</span>
+                                    <img src="https://i.pravatar.cc/150?img=15" style="width:20px; height:20px; border-radius:50%;">
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-left">
+                                    <i class="fa-solid fa-grip-vertical text-muted"></i>
+                                    <input type="checkbox">
+                                    <i class="fa-regular fa-star star empty"></i>
+                                    <span class="fw-bold">Appointment booking payment</span>
+                                </div>
+                                <div class="flex items-center gap-10">
+                                    <span class="badge badge-light-primary">Inprogress</span>
+                                    <img src="https://i.pravatar.cc/150?img=16" style="width:20px; height:20px; border-radius:50%;">
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-left">
+                                    <i class="fa-solid fa-grip-vertical text-muted"></i>
+                                    <input type="checkbox">
+                                    <i class="fa-regular fa-star star empty"></i>
+                                    <span class="fw-bold">Patient and Doctor video</span>
+                                </div>
+                                <div class="flex items-center gap-10">
+                                    <span class="badge badge-light-success">Completed</span>
+                                    <div class="avatars"><img src="https://i.pravatar.cc/150?img=17" style="width:20px;"><img src="https://i.pravatar.cc/150?img=18" style="width:20px; margin-left:-5px;"></div>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-left">
+                                    <i class="fa-solid fa-grip-vertical text-muted"></i>
+                                    <input type="checkbox" checked>
+                                    <i class="fa-regular fa-star star empty"></i>
+                                    <span class="fw-bold" style="text-decoration: line-through;">Private chat module</span>
+                                </div>
+                                <div class="flex items-center gap-10">
+                                    <span class="badge badge-light-primary">Pending</span>
+                                    <img src="https://i.pravatar.cc/150?img=19" style="width:20px; height:20px; border-radius:50%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 4: Performance, Skills, Widgets -->
+                <div class="grid-row grid-3">
+                    <!-- Performance -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Performance</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
+                        </div>
+                        <div style="font-size: 20px; font-weight: 700; margin-bottom: 10px;">98% <span class="badge badge-light-success" style="font-size:10px;">12%</span> <span style="font-size:11px; font-weight:400; color:#888;">vs last years</span></div>
+                        <div style="height: 200px;">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- My Skills -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">My Skills</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
+                        </div>
+                        
+                        <div class="skill-row">
+                            <div>
+                                <div class="fw-bold">Figma</div>
+                                <div class="text-muted" style="font-size: 10px;">Updated: 15 May 2025</div>
+                            </div>
+                            <div class="circle-progress" style="border: 2px solid #FF5B1E; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #FF5B1E;">95%</div>
+                        </div>
+                        <div class="skill-row">
+                            <div>
+                                <div class="fw-bold">HTML</div>
+                                <div class="text-muted" style="font-size: 10px;">Updated: 12 May 2025</div>
+                            </div>
+                            <div class="circle-progress" style="border: 2px solid #28a745; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #28a745;">85%</div>
+                        </div>
+                        <div class="skill-row">
+                            <div>
+                                <div class="fw-bold">CSS</div>
+                                <div class="text-muted" style="font-size: 10px;">Updated: 12 May 2025</div>
+                            </div>
+                            <div class="circle-progress" style="border: 2px solid #6f42c1; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #6f42c1;">70%</div>
+                        </div>
+                        <div class="skill-row">
+                            <div>
+                                <div class="fw-bold">Wordpress</div>
+                                <div class="text-muted" style="font-size: 10px;">Updated: 15 May 2025</div>
+                            </div>
+                            <div class="circle-progress" style="border: 2px solid #007bff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #007bff;">61%</div>
+                        </div>
+                    </div>
+
+                    <!-- Right Widgets (Stacked) -->
+                    <div class="flex flex-col gap-20">
+                        <!-- Birthday -->
+                        <div class="card birthday-card">
+                            <div class="card-title" style="color: white; margin-bottom: 10px;">Team Birthday</div>
+                            <img src="https://i.pravatar.cc/150?img=32" class="b-avatar">
+                            <div class="fw-bold">Andrew Jermia</div>
+                            <div style="font-size: 11px; opacity: 0.7; margin-bottom: 15px;">IOS Developer</div>
+                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 11px;">Send Wishes</button>
+                        </div>
+
+                        <!-- Leave Policy -->
+                        <div class="card" style="background: #164E63; color: white;">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="fw-bold">Leave Policy</div>
+                                    <div style="font-size: 10px; opacity: 0.8;">Last Updated: Today</div>
+                                </div>
+                                <button class="btn btn-outline" style="background: white; border: none; color: black; font-size: 10px; padding: 4px 8px;">View All</button>
+                            </div>
+                        </div>
+
+                        <!-- Next Holiday -->
+                        <div class="card holiday-card">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="fw-bold">Next Holiday</div>
+                                    <div style="font-size: 10px; opacity: 0.8;">Diwali, 15 Sep 2025</div>
+                                </div>
+                                <button class="btn" style="background: white; font-size: 10px; padding: 4px 8px;">View All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 5: Team, Notifications, Meetings -->
+                <div class="grid-row grid-bottom">
+                    <!-- Team Members -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Team Members</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">View All</button>
+                        </div>
+                        <div class="list-item">
+                            <img src="https://i.pravatar.cc/150?img=50" style="width:35px; height:35px; border-radius:50%; margin-right:10px;">
+                            <div class="list-content">
+                                <div class="list-title">Alexander Jermai</div>
+                                <div class="list-sub">UI/UX Designer</div>
+                            </div>
+                            <div class="action-icons"><i class="fa-solid fa-phone"></i><i class="fa-regular fa-envelope"></i><i class="fa-regular fa-comment"></i></div>
+                        </div>
+                        <div class="list-item">
+                            <img src="https://i.pravatar.cc/150?img=51" style="width:35px; height:35px; border-radius:50%; margin-right:10px;">
+                            <div class="list-content">
+                                <div class="list-title">Doglas Martini</div>
+                                <div class="list-sub">Product Designer</div>
+                            </div>
+                            <div class="action-icons"><i class="fa-solid fa-phone"></i><i class="fa-regular fa-envelope"></i><i class="fa-regular fa-comment"></i></div>
+                        </div>
+                        <div class="list-item">
+                            <img src="https://i.pravatar.cc/150?img=52" style="width:35px; height:35px; border-radius:50%; margin-right:10px;">
+                            <div class="list-content">
+                                <div class="list-title">Daniel Esbella</div>
+                                <div class="list-sub">Project Manager</div>
+                            </div>
+                            <div class="action-icons"><i class="fa-solid fa-phone"></i><i class="fa-regular fa-envelope"></i><i class="fa-regular fa-comment"></i></div>
+                        </div>
+                        <div class="list-item">
+                            <img src="https://i.pravatar.cc/150?img=53" style="width:35px; height:35px; border-radius:50%; margin-right:10px;">
+                            <div class="list-content">
+                                <div class="list-title">Stephan Peralt</div>
+                                <div class="list-sub">Team Lead</div>
+                            </div>
+                            <div class="action-icons"><i class="fa-solid fa-phone"></i><i class="fa-regular fa-envelope"></i><i class="fa-regular fa-comment"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Notifications</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">View All</button>
+                        </div>
+                        <!-- Notif 1 -->
+                        <div class="flex gap-10" style="margin-bottom: 15px;">
+                            <img src="https://i.pravatar.cc/150?img=60" style="width:35px; height:35px; border-radius:50%;">
+                            <div>
+                                <div class="list-title" style="font-size: 12px;">Lex Murphy requested access to UNIX</div>
+                                <div class="list-sub">Today at 9:42 AM</div>
+                                <div style="margin-top: 5px; background: #fff5f5; padding: 5px; border-radius: 4px; display:inline-flex; align-items:center; font-size: 11px; gap: 5px; color: #d63384;">
+                                    <i class="fa-solid fa-file-pdf"></i> EY_review.pdf
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Notif 2 -->
+                        <div class="flex gap-10" style="margin-bottom: 15px;">
+                            <img src="https://i.pravatar.cc/150?img=61" style="width:35px; height:35px; border-radius:50%;">
+                            <div>
+                                <div class="list-title" style="font-size: 12px;">Lex Murphy requested access to UNIX</div>
+                                <div class="list-sub">Today at 10:00 AM</div>
+                                <div style="margin-top: 5px;">
+                                    <button class="btn btn-primary" style="padding: 4px 10px; font-size: 10px;">Approve</button>
+                                    <button class="btn btn-outline" style="padding: 4px 10px; font-size: 10px;">Decline</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Notif 3 -->
+                        <div class="flex gap-10">
+                            <img src="https://i.pravatar.cc/150?img=62" style="width:35px; height:35px; border-radius:50%;">
+                            <div>
+                                <div class="list-title" style="font-size: 12px;">Lex Murphy requested access to UNIX</div>
+                                <div class="list-sub">Today at 12:00 PM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meetings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Meetings Schedule</span>
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;"><i class="fa-regular fa-calendar"></i> Today</button>
+                        </div>
+                        <div class="timeline-feed">
+                            <div class="feed-item">
+                                <div class="feed-dot" style="background: #FF5B1E;"></div>
+                                <span class="feed-time">09:25 AM</span>
+                                <div style="display:inline-block; vertical-align:top;">
+                                    <div class="list-title">Marketing Strategy Presentation</div>
+                                    <div class="list-sub">Marketing</div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-dot" style="background: #007bff;"></div>
+                                <span class="feed-time">09:20 AM</span>
+                                <div style="display:inline-block; vertical-align:top;">
+                                    <div class="list-title">Design Review Hospital Project</div>
+                                    <div class="list-sub">Review</div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-dot" style="background: #ffc107;"></div>
+                                <span class="feed-time">09:18 AM</span>
+                                <div style="display:inline-block; vertical-align:top;">
+                                    <div class="list-title">Birthday Celebration of Employee</div>
+                                    <div class="list-sub">Celebration</div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-dot" style="background: #28a745;"></div>
+                                <span class="feed-time">09:10 AM</span>
+                                <div style="display:inline-block; vertical-align:top;">
+                                    <div class="list-title">Update of Project Flow</div>
+                                    <div class="list-sub">Development</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="user.js"></script>
+    
+</body>
+</html>

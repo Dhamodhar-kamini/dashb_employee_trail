@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="applyleave.css">
+</head>
+<body>
+
+    <!-- Main Page Trigger -->
+    <div class="main-container">
+        <button class="btn-trigger" onclick="openModal()">
+            <i class="fa-solid fa-plus"></i> Apply Leave
+        </button>
+    </div>
+
+    <!-- MODAL POPUP -->
+    <div class="modal-overlay" id="leaveModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Add Leave</h3>
+                <button class="close-icon" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="leaveForm">
+                    <div class="form-group">
+                        <label>Employee Name <span class="req">*</span></label>
+                        <input type="text" id="empName" class="form-control" placeholder="Enter Name" onblur="checkUserBalance()"> 
+                    </div>
+
+                    <div class="form-group">
+                        <label>Leave Type <span class="req">*</span></label>
+                        <select id="leaveType" class="form-control" onchange="checkUserBalance()">
+                            <option value="" disabled selected>Select Leave Type</option>
+                            <option value="medical">Medical Leave</option>
+                            <option value="casual">Casual Leave</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>From <span class="req">*</span></label>
+                            <input type="date" id="fromDate" class="form-control" onchange="calculateDuration()">
+                        </div>
+                        <div class="form-group half">
+                            <label>To <span class="req">*</span></label>
+                            <input type="date" id="toDate" class="form-control" onchange="calculateDuration()">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>Number of days</label>
+                            <input type="text" id="numDays" class="form-control readonly" value="0" readonly>
+                        </div>
+                        <div class="form-group half">
+                            <label>Remaining Leaves</label>
+                            <input type="text" id="balance" class="form-control readonly highlight" value="-" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Leave Reason <span class="req">*</span></label>
+                        <textarea id="reason" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                        <button type="button" class="btn-submit" onclick="submitLeave()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM TOAST NOTIFICATION (Replaces Alert) -->
+    <div id="customToast" class="toast">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="toastMsg">Error Message</span>
+    </div>
+
+    <script src="applyleave.js"></script>
+</body>
+</html>
