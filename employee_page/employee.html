@@ -41,7 +41,7 @@
       
       <!-- Dashboard -->
       <li class="menu-item active">
-        <a href="#" class="menu-link">
+        <a href="../dashboard/dashboard.html" class="menu-link">
           <div class="link-left">
             <i class="fa-solid fa-table-columns"></i>
             <span>Dashboard</span>
@@ -51,7 +51,7 @@
 
       <!-- Employees -->
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="../employee_page/employee.html" class="menu-link">
           <div class="link-left">
             <i class="fa-regular fa-user"></i>
             <span>Employees</span>
@@ -61,7 +61,7 @@
 
       <!-- Attendance -->
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="../attendance/attendance.html" class="menu-link">
           <div class="link-left">
             <i class="fa-solid fa-calendar-days"></i>
             <span>Attendance</span>
@@ -69,7 +69,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="../apply_leave/leave.html" class="menu-link">
           <div class="link-left">
             <i class="fa-solid fa-file-signature"></i>
             <span>Apply Leave</span>
@@ -77,30 +77,11 @@
         </a>
       </li>
 
-      <!-- Daily Task -->
-      <li class="menu-item">
-        <a href="#" class="menu-link">
-          <div class="link-left">
-            <i class="fa-regular fa-square-check"></i>
-            <span>Daily Task</span>
-          </div>
-        </a>
-      </li>
-
-      <!-- Task -->
-      <li class="menu-item">
-        <a href="#" class="menu-link">
-          <div class="link-left">
-            <i class="fa-solid fa-list-check"></i>
-            <span>Task</span>
-          </div>
-        </a>
-      </li>
 
 
       <!-- Payslip -->
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="../payslips/payslip.html" class="menu-link">
           <div class="link-left">
             <i class="fa-regular fa-credit-card"></i>
             <span>Payslip</span>
@@ -108,29 +89,9 @@
         </a>
       </li>
 
-      <!-- Leaves -->
-      <li class="menu-item">
-        <a href="#" class="menu-link">
-          <div class="link-left">
-            <i class="fa-solid fa-umbrella-beach"></i>
-            <span>Leaves</span>
-          </div>
-        </a>
-      </li>
-
-      <!-- Manage Leave -->
-      <li class="menu-item">
-        <a href="#" class="menu-link">
-          <div class="link-left">
-            <i class="fa-regular fa-calendar-check"></i>
-            <span>Manage Leave</span>
-          </div>
-        </a>
-      </li>
-
       <!-- Asset Allocation -->
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="../asset_allocation/assetallocation.html" class="menu-link">
           <div class="link-left">
             <i class="fa-solid fa-phone"></i>
             <span>Asset Allocation</span>
@@ -154,52 +115,45 @@
                         </button>
                         
                         <div class="page-title">
-                            <h1>Employee Dashboard</h1>
+                            <h1>Employee</h1>
                             <div class="breadcrumbs">
                                 <i class="fa-solid fa-house"></i> > Dashboard > Employee Dashboard
                             </div>
                         </div>
                     </div>
-                    <div class="flex gap-10 header-actions">
-                        <button class="btn btn-outline"><i class="fa-solid fa-file-export"></i> Export</button>
-                        <button class="btn btn-outline"><i class="fa-solid fa-calendar"></i> 15-04-2025</button>
-                    </div>
+                    <!-- Right Side: Search & Filter -->
+    <div class="header-right">
+        <div class="search-box-wrapper">
+            <!-- Filter Dropdown -->
+            <select id="searchFilter" class="search-select">
+                <option value="all">All</option>
+                <option value="name">Name</option>
+                <option value="id">ID</option>
+                <option value="role">Role</option>
+            </select>
+            
+            <!-- Divider -->
+            <div class="search-divider"></div>
+
+            <!-- Input Field -->
+            <input type="text" id="searchInput" class="search-input" placeholder="Search employee...">
+            
+            <!-- Search Button -->
+            <button id="searchBtn" class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </div>
+                    
                 </header>
 
                 <!-- ROW 1: Profile, Leave Chart, Leave Stats -->
                 <div class="grid-row grid-3">
-                    <!-- Profile -->
-                    <!-- <div class="card profile-card">
-                        <div class="profile-header">
-                            <img src="https://i.pravatar.cc/150?img=11" class="profile-img" alt="User">
-                            <div>
-                                <div class="fw-bold" style="font-size: 15px;">Stephan Peralt</div>
-                                <div style="font-size: 11px; opacity: 0.8;">Senior Product Designer • UI/UX Design</div>
-                            </div>
-                        </div>
-                        <div class="profile-body">
-                            <div class="info-row">
-                                <span class="info-label">Phone Number</span>
-                                <div class="info-val">+1 324 3453 545</div>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Email Address</span>
-                                <div class="info-val">steperde124@example.com</div>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Report Office</span>
-                                <div class="info-val">Doglas Martini</div>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Joined on</span>
-                                <div class="info-val">15 Jan 2024</div>
-                            </div>
-                        </div>
-                    </div> -->
+                    
                     <div class="profile-card">
   <div class="profile-header">
-    <img src="" class="profile-img">
-    <div class="profile-name">Shaik Saleem</div>
+    <img src="../assets/profiledp.jpeg" class="profile-img">
+    <div class="profile-name">DD</div>
     <div class="profile-role">Python Developer</div>
   </div>
 
@@ -230,412 +184,12 @@
 
     
   </div>
-</div>
-
-                    <!-- Leave Chart -->
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Leave Details</span>
-                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
-                        </div>
-                        <div class="flex items-center">
-                            <div style="flex:1">
-                                <ul class="leave-legend">
-                                    <li><span class="dot" style="background:#000;"></span> <b>1254</b> on time</li>
-                                    <li><span class="dot" style="background:#28a745;"></span> <b>32</b> Late Attendance</li>
-                                    <li><span class="dot" style="background:#FF5B1E;"></span> <b>658</b> Work From Home</li>
-                                    <li><span class="dot" style="background:#dc3545;"></span> <b>14</b> Absent</li>
-                                    <li><span class="dot" style="background:#ffc107;"></span> <b>68</b> Sick Leave</li>
-                                </ul>
-                                <div style="margin-top: 15px; font-size: 11px; color: var(--text-muted);">
-                                    <i class="fa-solid fa-square-check" style="color: var(--primary);"></i> Better than 85% of Employees
-                                </div>
-                            </div>
-                            <div class="chart-wrap">
-                                <canvas id="leaveChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                  
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Leave Details</span>
-                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 10px;">2026</button>
-                        </div>
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <span>Total Leaves</span>
-                                <h4>16</h4>
-                            </div>
-                            <div class="stat-box">
-                                <span>Taken</span>
-                                <h4>10</h4>
-                            </div>
-                            <div class="stat-box">
-                                <span>Absent</span>
-                                <h4>2</h4>
-                            </div>
-                            <div class="stat-box">
-                                <span>Request</span>
-                                <h4>0</h4>
-                            </div>
-                            <div class="stat-box">
-                                <span>Worked Days</span>
-                                <h4>240</h4>
-                            </div>
-                            <div class="stat-box">
-                                <span>Loss of Pay</span>
-                                <h4>2</h4>
-                            </div>
-                        </div>
-                        <button class="btn btn-dark btn-trigger" style="width: 100%;" onclick="openModal()">Apply New Leave</button>
-                    </div>
-                </div>
-
-                <!-- leave apply modal -->
-                 <div class="lm-modal-overlay" id="lmLeaveModal">
-    <div class="lm-modal-box">
-        <div class="lm-modal-header">
-            <h3>Add Leave Request</h3>
-            <button class="lm-close-icon" id="lmCloseBtn"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
-        <div class="lm-modal-body">
-            <form id="lmLeaveForm">
-                <div class="lm-form-group">
-                    <label>Employee Name <span class="lm-req">*</span></label>
-                    <input type="text" id="lmEmpName" class="lm-form-control" placeholder="Enter Name"> 
-                </div>
-
-                <div class="lm-form-group">
-                    <label>Leave Type <span class="lm-req">*</span></label>
-                    <select id="lmLeaveType" class="lm-form-control">
-                        <option value="" disabled selected>Select Leave Type</option>
-                        <option value="casual">Casual Leave (12/yr)</option>
-                        <option value="medical">Medical Leave (10/yr)</option>
-                        <option value="nopay">Loss of Pay</option>
-                    </select>
-                </div>
-
-                <div class="lm-form-row">
-                    <div class="lm-form-group lm-half">
-                        <label>From Date <span class="lm-req">*</span></label>
-                        <input type="date" id="lmFromDate" class="lm-form-control">
-                    </div>
-                    <div class="lm-form-group lm-half">
-                        <label>To Date <span class="lm-req">*</span></label>
-                        <input type="date" id="lmToDate" class="lm-form-control">
-                    </div>
-                </div>
-
-                <div class="lm-form-row">
-                    <div class="lm-form-group lm-half">
-                        <label>Total Days</label>
-                        <input type="text" id="lmNumDays" class="lm-form-control lm-readonly" value="0" readonly>
-                    </div>
-                    <div class="lm-form-group lm-half">
-                        <label>Current Balance</label>
-                        <input type="text" id="lmBalance" class="lm-form-control lm-readonly lm-highlight" value="-" readonly>
-                    </div>
-                </div>
-
-                <div class="lm-form-group">
-                    <label>Reason for Leave <span class="lm-req">*</span></label>
-                    <textarea id="lmReason" class="lm-form-control" rows="3" placeholder="Enter reason here..."></textarea>
-                </div>
-
-                <div class="lm-modal-footer">
-                    <button type="button" class="lm-btn-cancel" id="lmCancelBtn">Cancel</button>
-                    <button type="button" class="lm-btn-submit" id="lmSubmitBtn">Submit Request</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+</div>                  
+                    
                  
 
-                <!-- ROW 2: Attendance, Hours, Timeline -->
-                <div class="grid-row grid-attend">
-    <!-- Attendance Card -->
-    <div class="card attendance-card">
-        <div class="text-muted">Attendance</div>
-        <!-- Added ID for dynamic date -->
-        <div class="fw-bold" style="font-size: 16px;" id="currentDateDisplay">--:-- --, -- --- ----</div>
         
-        <div class="timer-circle">
-            <!-- Canvas for chart (optional, kept structure) -->
-            <canvas id="attendanceChart" width="100" height="100"></canvas> 
-            
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                <div style="font-size: 10px; color: #888;">Total Hours</div>
-                <!-- Added ID to update this text -->
-                <div id="timerDisplay" style="font-size: 18px; font-weight: 700;">00:00:00</div>
-            </div>
-        </div>
-
-        <!-- Added ID to update production hours -->
-        <div id="productionDisplay" class="badge badge-dark" style="background: #222; color: white; margin-bottom: 10px;">
-            Active : 0.00 hrs
-        </div>
-        
-        <!-- Added ID to update status message -->
-        <div id="punchStatusMsg" style="font-size: 11px; color: var(--primary); margin-bottom: 15px;">
-            <i class="fa-solid fa-fingerprint"></i> Not punched in yet
-        </div>
-        
-        <!-- Added ID to button -->
-        <button id="punchBtn" class="punch-btn">Punch In</button>
-    </div>
-    <div class="container">
-        <div class="calendar-card">
-            
-            <!-- Header with Dropdowns -->
-            <div class="calendar-header">
-                <div class="select-group">
-                    <!-- Month Dropdown -->
-                    <select id="monthSelect" class="cal-select"></select>
-                    
-                    <!-- Year Dropdown -->
-                    <select id="yearSelect" class="cal-select year-select"></select>
-                </div>
-                <button class="btn-today" onclick="resetToToday()">Today</button>
-            </div>
-
-            <!-- Weekdays -->
-            <div class="weekdays">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
-            </div>
-
-            <!-- Days Grid -->
-            <div class="days-grid" id="daysGrid"></div>
-
-        </div>
-    </div>
-
-</div>
-
-
-<!-- breakmanagement section -->
-  <div class="bm-main-container">
-        <!-- Main Content Grid -->
-        <div class="bm-grid-layout">
-            
-            <!-- Left Column: Timer Control -->
-            <div class="bm-card bm-timer-card">
-                <div class="bm-card-header">
-                    <span class="bm-card-title">Current Session</span>
-                    <span class="bm-badge bm-badge-light" id="bmStatusBadge">Not Active</span>
-                </div>
-                
-                <div class="bm-timer-body">
-                    <div class="bm-select-wrapper">
-                        <label class="bm-label">Select Break Type</label>
-                        <select id="bmBreakTypeSelect" class="bm-form-control">
-                            <option value="lunch">🍽️ Lunch Break (45 Mins)</option>
-                            <option value="normal">☕ Normal Break (15 Mins)</option>
-                        </select>
-                    </div>
-
-                    <!-- Timer Circle -->
-                    <div class="bm-timer-circle-wrap">
-                        <div class="bm-timer-circle">
-                            <div class="bm-timer-text" id="bmTimerDisplay">00:00:00</div>
-                            <div class="bm-timer-label">Duration</div>
-                        </div>
-                    </div>
-
-                    <!-- Warning Message -->
-                    <div id="bmLimitWarning" class="bm-warning-box" style="display: none;">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Time Limit Exceeded!
-                    </div>
-
-                    <!-- Controls -->
-                    <div class="bm-timer-controls">
-                        <button id="bmBtnIn" class="bm-btn bm-btn-primary bm-btn-block">
-                            <i class="fa-solid fa-mug-hot"></i> Break In
-                        </button>
-                        <button id="bmBtnOut" class="bm-btn bm-btn-dark bm-btn-block" style="display: none;">
-                            <i class="fa-solid fa-person-walking-arrow-right"></i> Break Out
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Stats -->
-            <div class="bm-stats-column">
-                
-                <!-- Usage Limits Card -->
-                <div class="bm-card">
-                    <div class="bm-card-header">
-                        <span class="bm-card-title">Daily Usage Limits</span>
-                    </div>
-                    <div class="bm-stats-body">
-                        
-                        <!-- Lunch Progress -->
-                        <div class="bm-skill-item">
-                            <div class="bm-skill-info">
-                                <span class="bm-skill-name">Lunch Break</span>
-                                <span class="bm-skill-val"><span id="bmLunchUsed">0</span> / 45 mins</span>
-                            </div>
-                            <div class="bm-progress-bg">
-                                <div class="bm-progress-fill" id="bmLunchBar" style="width: 0%; background-color: #FF5B1E;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Normal Break Progress -->
-                        <div class="bm-skill-item">
-                            <div class="bm-skill-info">
-                                <span class="bm-skill-name">Normal Break</span>
-                                <span class="bm-skill-val"><span id="bmNormalUsed">0</span> / 15 mins</span>
-                            </div>
-                            <div class="bm-progress-bg">
-                                <div class="bm-progress-fill" id="bmNormalBar" style="width: 0%; background-color: #00C853;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Summary Dots -->
-                        <div class="bm-total-summary">
-                            <div class="bm-summary-box">
-                                <span class="bm-dot bm-dot-orange"></span>
-                                <span class="bm-lbl">Total Break</span>
-                                <span class="bm-val" id="bmTotalTime">00h 00m</span>
-                            </div>
-                            <div class="bm-summary-box">
-                                <span class="bm-dot bm-dot-green"></span>
-                                <span class="bm-lbl">Remaining</span>
-                                <span class="bm-val" id="bmRemainingTime">60m</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Policy Card -->
-                <div class="bm-card bm-highlight-card">
-                    <div class="bm-highlight-content">
-                        <h3>Break Policy</h3>
-                        <p>Lunch is strictly 45 mins. Normal breaks are 15 mins. Exceeding limits will be deducted from work hours.</p>
-                        <button class="bm-btn bm-btn-small-white">View Policy</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Bottom Section: History Log -->
-        <div class="bm-card bm-history-card">
-            <div class="bm-card-header">
-                <span class="bm-card-title">Today's Activity Log</span>
-                <button class="bm-btn bm-btn-white bm-btn-sm">Filter <i class="fa-solid fa-chevron-down"></i></button>
-            </div>
-            <!-- Scrollable Table Container -->
-            <div class="bm-table-responsive">
-                <table class="bm-custom-table">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Duration</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bmLogTableBody">
-                        <!-- JS will insert rows here -->
-                        <tr id="bmEmptyState">
-                            <td colspan="5" style="text-align: center; color: #B5B5C3; padding: 20px;">
-                                No breaks taken yet today.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
- 
-
-                    <!-- Right Side: Stats & Timeline -->
-                    <div>
-                        <!-- 4 Small Cards -->
-                        <div class="small-stat-cards">
-                            <div class="card">
-                                <i class="fa-solid fa-clock" style="color: #FF5B1E; margin-bottom: 5px;"></i>
-                                <div style="font-size: 20px; font-weight: 600;">8.36 <span style="font-size: 12px; color:#999;">/ 9</span></div>
-                                <div class="text-muted">Total Hours Today</div>
-                                <div class="text-success" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-up"></i> 5% This Week</div>
-                            </div>
-                            <div class="card">
-                                <i class="fa-solid fa-calendar-week" style="color: #333; margin-bottom: 5px;"></i>
-                                <div style="font-size: 20px; font-weight: 600;">10 <span style="font-size: 12px; color:#999;">/ 40</span></div>
-                                <div class="text-muted">Total Hours Week</div>
-                                <div class="text-success" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-up"></i> 7% Last Week</div>
-                            </div>
-                            <div class="card">
-                                <i class="fa-solid fa-calendar-days" style="color: #007bff; margin-bottom: 5px;"></i>
-                                <div style="font-size: 20px; font-weight: 600;">75 <span style="font-size: 12px; color:#999;">/ 98</span></div>
-                                <div class="text-muted">Total Hours Month</div>
-                                <div class="text-danger" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-down"></i> 8% Last Month</div>
-                            </div>
-                            <div class="card">
-                                <i class="fa-solid fa-briefcase" style="color: #dc3545; margin-bottom: 5px;"></i>
-                                <div style="font-size: 20px; font-weight: 600;">16 <span style="font-size: 12px; color:#999;">/ 28</span></div>
-                                <div class="text-muted">Overtime this Month</div>
-                                <div class="text-danger" style="font-size: 10px; margin-top: 5px;"><i class="fa-solid fa-arrow-down"></i> 6% Last Month</div>
-                            </div>
-                        </div>
-
-                        <!-- Timeline Chart -->
-                        <div class="card">
-                            <div class="flex justify-between" style="margin-bottom: 10px;">
-                                <div>
-                                    <span class="dot" style="background:#ddd;"></span> Total Working hours
-                                    <div class="fw-bold" style="font-size: 16px;">12h 36m</div>
-                                </div>
-                                <div>
-                                    <span class="dot" style="background:#00c853;"></span> Productive Hours
-                                    <div class="fw-bold" style="font-size: 16px;">08h 36m</div>
-                                </div>
-                                <div>
-                                    <span class="dot" style="background:#ffc107;"></span> Break hours
-                                    <div class="fw-bold" style="font-size: 16px;">22m 15s</div>
-                                </div>
-                                <div>
-                                    <span class="dot" style="background:#007bff;"></span> Overtime
-                                    <div class="fw-bold" style="font-size: 16px;">02h 15m</div>
-                                </div>
-                            </div>
-                            <div class="time-bar">
-                                <!-- Simulated Chart Segments -->
-                                <div class="tb-seg" style="width: 10%; background: transparent;"></div>
-                                <div class="tb-seg" style="width: 20%; background: #00c853;"></div>
-                                <div class="tb-seg" style="width: 5%; background: #ffc107;"></div>
-                                <div class="tb-seg" style="width: 30%; background: #00c853;"></div>
-                                <div class="tb-seg" style="width: 15%; background: #ffc107;"></div>
-                                <div class="tb-seg" style="width: 15%; background: #00c853;"></div>
-                                <div class="tb-seg" style="width: 5%; background: #ffc107;"></div>
-                                <div class="tb-seg" style="width: 5%; background: #007bff;"></div>
-                            </div>
-                            <div class="flex justify-between text-muted" style="margin-top: 5px; font-size: 10px;">
-                                <span>06:00</span> <span>08:00</span> <span>10:00</span> <span>12:00</span> <span>02:00</span> <span>04:00</span> <span>06:00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            
-                    
-
-                
-                    <!-- Right Widgets (Stacked) -->
+                    <!-- birthday wishes -->
                     <div class="flex flex-col gap-20">
                         <!-- Birthday -->
                         <div class="card birthday-card">
@@ -668,6 +222,12 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+
+                    
                 </div>
 
                 

@@ -19,6 +19,105 @@ body {
     align-items: center;
 } */
 
+/* --- Header Layout --- */
+.page-header {
+    display: flex;
+    justify-content: space-between; /* Pushes Search to the right */
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap; /* Allows wrapping on mobile */
+    gap: 15px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- Search Box Container --- */
+.search-box-wrapper {
+    display: flex;
+    align-items: center;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden; /* Keeps children inside corners */
+    transition: 0.3s;
+    width: 400px;
+    max-width: 100%;
+}
+
+.search-box-wrapper:focus-within {
+    border-color: #2dd4bf; /* Highlight color on focus */
+    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
+    background: #fff;
+}
+
+/* --- Filter Dropdown --- */
+.search-select {
+    border: none;
+    background: transparent;
+    padding: 10px 10px 10px 15px;
+    font-size: 13px;
+    color: #555;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.search-select:hover {
+    color: #000;
+}
+
+/* --- Vertical Divider --- */
+.search-divider {
+    width: 1px;
+    height: 20px;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+
+/* --- Input Field --- */
+.search-input {
+    border: none;
+    background: transparent;
+    padding: 10px;
+    flex: 1; /* Takes remaining space */
+    font-size: 14px;
+    outline: none;
+    color: #333;
+}
+
+/* --- Search Button --- */
+.search-btn {
+    background: transparent;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #666;
+    transition: 0.2s;
+}
+
+.search-btn:hover {
+    color: #2dd4bf; /* Brand color */
+    background-color: rgba(0,0,0,0.02);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .search-box-wrapper {
+        width: 100%;
+    }
+}
+
 .calendar-card {
     background: var(--white);
     width: 720px;
@@ -117,9 +216,36 @@ body {
     color: #E0E0E0;
 }
 
+/* Style for days marked as Present (Green) */
+.day.present {
+    background-color: #10b981; /* Green color */
+    color: white !important;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    position: relative;
+    border: none;
+}
+
+/* Optional: Add a small checkmark icon via CSS */
+.day.present::after {
+    content: '✓';
+    font-size: 8px;
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.8;
+}
+
+/* Ensure 'Present' overrides 'Today' if user punches in today */
+.day.today.present {
+    background-color: #10b981; /* Green overrides Primary */
+    border: 2px solid white;    /* Add a border to show it is still today */
+}
+
 /* profile */
 .profile-card {
-  width: 320px;
+  width: 500px;
   background: white;
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -127,9 +253,9 @@ body {
   transition: 0.3s;
 }
 
-.profile-card:hover {
+/* .profile-card:hover {
   transform: translateY(-5px);
-}
+} */
 
 .profile-header {
   background: linear-gradient(135deg, #fe5e1f, #e8701b);
@@ -218,6 +344,26 @@ body {
 
 .btn-view:hover {
   background: #d5d5d5;
+}
+
+/* Style for when the user has finished work for the day */
+.punch-btn.completed {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    border: 1px solid #dee2e6;
+    pointer-events: none; /* Prevents clicking */
+}
+
+/* Style for Punch Out mode (Active) */
+.punch-btn.punched-out-mode {
+    background-color: #dc3545; /* Red */
+    color: white;
+    border: none;
+}
+
+.punch-btn.punched-out-mode:hover {
+    background-color: #c82333;
 }
 
 :root {
@@ -769,9 +915,10 @@ ul {
 .lm-btn-cancel:hover { background: #f9f9f9; }
 
 .lm-btn-submit {
-    background: var(--lm-primary); border: none; 
+    background: orangered; 
     padding: 10px 24px; border-radius: 6px; 
     font-weight: 500; color: white; cursor: pointer;
+    border: none; transition: background 0.2s;
 }
 .lm-btn-submit:hover { background: #e04e18; }
 
@@ -793,6 +940,74 @@ ul {
 .lm-toast.success i { color: var(--lm-success); }
 .lm-toast.error i { color: var(--lm-danger); }
 
+/* --- Success Modal Box --- */
+.lm-success-box {
+    background: white;
+    width: 400px;
+    max-width: 85%;
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: lmPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+@keyframes lmPopUp {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Success Icon Circle */
+.lm-success-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #e8f5e9; /* Light Green */
+    color: var(--lm-success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 35px;
+    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.1); /* Subtle ring */
+}
+
+/* Typography */
+.lm-success-box h3 {
+    margin: 0 0 10px 0;
+    color: var(--lm-text);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.lm-success-box p {
+    margin: 0 0 25px 0;
+    color: var(--lm-text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Success Button */
+.lm-btn-success-close {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.lm-btn-success-close:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+}
 
 /* breakmanagement section */
 body {
@@ -1310,43 +1525,6 @@ body {
   color: var(--dark);
 }
 
-/* Profile Card */
-/* .profile-card {
-  padding: 0;
-  overflow: hidden;
-}
-.profile-header {
-  background: var(--dark);
-  padding: 20px;
-  color: white;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-.profile-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid var(--primary);
-  object-fit: cover;
-}
-.profile-body {
-  padding: 20px;
-}
-.info-row {
-  margin-bottom: 15px;
-}
-.info-label {
-  display: block;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
-.info-val {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-main);
-}
 
 /* Leave Chart */
 .chart-wrap {
