@@ -141,136 +141,254 @@
     <div class="container">
         
         <!-- Header Section -->
-        <div class="profile-header" >
-            <div class="avatar-container">
-                <img class="profileImg" src="../assets/profiledp.jpeg" alt="Profile Picture">
-            </div>
+        <div class="profile-header">
+    <div class="avatar-container">
+        <!-- Added ID: mainProfileImage -->
+        <img class="profileImg" id="mainProfileImage" src="../assets/profiledp.jpeg" alt="Profile Picture">
+    </div>
 
-            <div class="profile-info-row">
-                <div class="user-identity">
-                    <h1>
-                        Dhamodhar
-                        <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified Profile</span>
-                    </h1>
-                    <div class="start-date">
-                        <i class="fa-regular fa-calendar"></i> Start Date: 27 Jan 2025
-                    </div>
-                </div>
-
-                <button class="btn-main-action">
-                    <i class="fa-solid fa-pen"></i> Edit Profile
-                </button>
+    <div class="profile-info-row">
+        <div class="user-identity">
+            <h1>
+                Dhamodhar
+                <span class="badge"><i class="fa-solid fa-circle-check"></i> Associate Software Engineer</span>
+            </h1>
+            <div class="start-date">
+                <i class="fa-regular fa-calendar"></i> Start Date: 27 Jan 2025
             </div>
         </div>
 
-        <!-- Details Card -->
-        <div class="details-card">
-            <div class="card-header">
-                <h2>Profile details</h2>
-                <a href="#" class="edit-link" id="toggleEditBtn">
-                    <i class="fa-solid fa-pen"></i> Edit
-                </a>
+        <!-- Added ID: openPhotoModalBtn -->
+        <button class="btn-main-action" id="openPhotoModalBtn">
+            <i class="fa-solid fa-camera"></i> Edit Profile Photo
+        </button>
+    </div>
+</div>
+
+<!-- 2. PHOTO UPLOAD MODAL (New) -->
+<div class="edit-modal-overlay" id="photoModal">
+    <div class="edit-modal-box photo-modal-box">
+        <div class="edit-modal-header">
+            <h3>Update Profile Picture</h3>
+            <button class="close-modal-btn" id="closePhotoModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="edit-modal-body center-body">
+            <!-- Image Preview Circle -->
+            <div class="photo-preview-container">
+                <img id="modalImagePreview" src="../assets/profiledp.jpeg" alt="Preview">
             </div>
 
-            <!-- Grid Layout -->
-            <div class="details-grid">
+            <!-- Custom File Input -->
+            <div class="file-input-wrapper">
+                <input type="file" id="newPhotoInput" accept="image/*" hidden>
+                <label for="newPhotoInput" class="btn-upload-trigger">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Choose New Image
+                </label>
+                <p id="fileNameDisplay" class="file-name-text">No file chosen</p>
+            </div>
+        </div>
+
+        <div class="edit-modal-footer">
+            <button type="button" class="btn-cancel" id="cancelPhotoBtn">Cancel</button>
+            <button type="button" class="btn-save" id="savePhotoBtn">Save Photo</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Details Card -->
+<div class="details-card">
+    <div class="card-header">
+        <h2>Profile Details</h2>
+        <button id="openEditModalBtn" class="edit-link-btn">
+            <i class="fa-solid fa-pen"></i> Edit
+        </button>
+    </div>
+
+    <!-- Grid Layout -->
+    <div class="details-grid">
+        
+        <!-- Full Name -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-regular fa-user"></i></div>
+            <div class="info-content">
+                <span class="label">Full Name</span>
+                <div class="value editable" id="display_name">Dhamodhar Kamini</div>
+            </div>
+        </div>
+
+        <!-- Email (Read Only - usually not edited directly in profile) -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-regular fa-envelope"></i></div>
+            <div class="info-content">
+                <span class="label">Email</span>
+                <div class="value">
+                    dhamodhar@oppty.in 
+                    <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-regular fa-calendar"></i></div>
+            <div class="info-content">
+                <span class="label">Date of birth</span>
+                <div class="value editable" id="display_dob">2025-12-04</div>
+            </div>
+        </div>
+
+        <!-- Username -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-user-tag"></i></div>
+            <div class="info-content">
+                <span class="label">Username</span>
+                <div class="value editable" id="display_username">Dhamodhar</div>
+            </div>
+        </div>
+
+        <!-- Number (UPDATED) -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+            <div class="info-content">
+                <span class="label">Mobile Number</span>
+                <div class="value">
+                    <!-- Wrapped text in span so badge is not deleted on edit -->
+                    <span id="display_number">(+91) 98765-4321</span>
+                    <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Designation (UPDATED) -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-id-badge"></i></div>
+            <div class="info-content">
+                <span class="label">Designation</span>
+                <div class="value editable" id="display_designation">Senior Product Designer</div>
+            </div>
+        </div>
+
+        <!-- Salary -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+            <div class="info-content">
+                <span class="label">Salary</span>
+                <div class="value editable" id="display_salary">₹4,20,000</div>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="info-content">
+                <span class="label">Address</span>
+                <div class="value editable" id="display_address">Dharmavaram, Andhra Pradesh</div>
+            </div>
+        </div>
+
+        <!-- City -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-regular fa-building"></i></div>
+            <div class="info-content">
+                <span class="label">City</span>
+                <div class="value editable" id="display_city">Dharmavaram</div>
+            </div>
+        </div>
+
+    </div>
+</div> 
+<!--edit profile popup -->
+<div class="edit-modal-overlay" id="editProfileModal">
+    <div class="edit-modal-box">
+        <div class="edit-modal-header">
+            <h3>Edit Profile Details</h3>
+            <button class="close-modal-btn" id="closeEditModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="editProfileForm">
+            <div class="edit-modal-body">
                 
-                <!-- Full Name -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-regular fa-user"></i></div>
-                    <div class="info-content">
-                        <span class="label">Full Name</span>
-                        <div class="value editable">Dhamodhar Kamini</div>
+                <!-- Row 1 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="input_name" class="modal-input" required>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="input_username" class="modal-input">
+                    </div> -->
+                </div>
+
+                <!-- Row 2 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="text" id="input_number" class="modal-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="input_dob" class="modal-input">
                     </div>
                 </div>
 
-                <!-- Email -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-regular fa-envelope"></i></div>
-                    <div class="info-content">
-                        <span class="label">Email</span>
-                        <div class="value">
-                            dhamodhar@oppty.in 
-                            <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                        </div>
+                <!-- Row 3 -->
+                <!-- <div class="form-row">
+                    <div class="form-group">
+                        <label>Designation</label>
+                        <input type="text" id="input_designation" class="modal-input">
                     </div>
+                    <div class="form-group">
+                        <label>Salary</label>
+                        <input type="text" id="input_salary" class="modal-input">
+                    </div>
+                </div> -->
+
+                <!-- Address Section -->
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="input_address" class="modal-input">
                 </div>
 
-                <!-- Date of Birth -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-regular fa-calendar"></i></div>
-                    <div class="info-content">
-                        <span class="label">Date of birth</span>
-                        <div class="value editable">04/12/2025</div>
-                    </div>
-                </div>
-
-                <!-- Username -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-user-tag"></i></div>
-                    <div class="info-content">
-                        <span class="label">Username</span>
-                        <div class="value editable">Dhamodhar</div>
-                    </div>
-                </div>
-
-                <!-- Number -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
-                    <div class="info-content">
-                        <span class="label">Number</span>
-                        <div class="value">
-                            (+91) 98765-4321
-                            <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-id-badge"></i></div>
-                    <div class="info-content">
-                        <span class="label">Designation</span>
-                        <div class="value">Senior Product Designer</div>
-                    </div>
-                </div>
-
-                <!-- CPF/CNPJ -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
-                    <div class="info-content">
-                        <span class="label">Salary</span>
-                        <div class="value editable">₹4,20,000</div>
-                    </div>
-                </div>
-
-                <!-- Address -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
-                    <div class="info-content">
-                        <span class="label">Address</span>
-                        <div class="value editable">Dharmavaram, Andhra Pradesh</div>
-                    </div>
-                </div>
-
-                <!-- City -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-regular fa-building"></i></div>
-                    <div class="info-content">
-                        <span class="label">City</span>
-                        <div class="value editable">Dharmavaram</div>
-                    </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="input_city" class="modal-input">
                 </div>
 
             </div>
+
+            <div class="edit-modal-footer">
+                <button type="button" class="btn-cancel" id="cancelEditBtn">Cancel</button>
+                <button type="submit" class="btn-save">Save Details</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SUCCESS TOAST NOTIFICATION -->
+<div id="successToast" class="toast-notification">
+    <div class="toast-content">
+        <i class="fa-solid fa-circle-check toast-icon"></i>
+        <div class="toast-message">
+            <span class="toast-title">Success</span>
+            <span class="toast-text">Profile details saved successfully!</span>
         </div>
+    </div>
+    <button class="toast-close" onclick="closeToast()"><i class="fa-solid fa-xmark"></i></button>
+</div>
+
+
+
+
         <!-- bank details -->
         <div class="details-card" style="margin-top: 20px;">
             <div class="card-header">
                 <h2>Payment Information</h2>
-                <a href="#" class="edit-link" id="toggleEditBtn">
+                <!-- <a href="#" class="edit-link" id="toggleEditBtn">
                     <i class="fa-solid fa-pen"></i> Edit
-                </a>
+                </a> -->
             </div>
 
             <!-- Grid Layout -->
@@ -349,9 +467,9 @@
         <div class="details-card" style="margin-top: 20px;">
             <div class="card-header">
                 <h2>Statutory Information</h2>
-                <a href="#" class="edit-link" id="toggleEditBtn">
+                <!-- <a href="#" class="edit-link" id="toggleEditBtn">
                     <i class="fa-solid fa-pen"></i> Edit
-                </a>
+                </a> -->
             </div>
 
             <!-- Grid Layout -->
@@ -424,60 +542,98 @@
             </div>
         </div>
 
+        <!-- other details -->
         <div class="details-card" style="margin-top: 20px;">
-            <div class="card-header">
-                <h2>Other Information</h2>
-                <a href="#" class="edit-link" id="toggleEditBtn">
-                    <i class="fa-solid fa-pen"></i> Edit
-                </a>
+    <div class="card-header">
+        <h2>Other Information</h2>
+        <!-- Unique ID for this button -->
+        <button id="openOtherEditBtn" class="edit-link-btn">
+            <i class="fa-solid fa-pen"></i> Edit
+        </button>
+    </div>
+
+    <div class="details-grid">
+        
+        <!-- Phone Number -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-phone-volume"></i></div>
+            <div class="info-content">
+                <span class="label">Phone Number</span>
+                <div class="value editable" id="display_other_phone">(+91) 9876543210</div>
             </div>
+        </div>
 
-            <!-- Grid Layout -->
-            <div class="details-grid">
-                
-                <!-- Full Name -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-phone-volume"></i></div>
-                    <div class="info-content">
-                        <span class="label">Phone Number</span>
-                        <div class="value editable">(+91) 9876543210</div>
-                    </div>
-                </div>
-
-                <!-- Email -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-brands fa-whatsapp" style="color:#25D366;"></i></div>
-                    <div class="info-content">
-                        <span class="label">WhatsApp Integration</span>
-                        <div class="value">
-                            Enabled
-                            <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Date of Birth -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-venus-mars"></i></div>
-                    <div class="info-content">
-                        <span class="label">Gender</span>
-                        <div class="value editable">Male
-                             
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Username -->
-                <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
-                    <div class="info-content">
-                        <span class="label">Date of Birth</span>
-                        <div class="value editable">7th july, 2001</div>
-                    </div>
+        <!-- WhatsApp (Read Only - Complex verification usually handled elsewhere) -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-brands fa-whatsapp" style="color:#25D366;"></i></div>
+            <div class="info-content">
+                <span class="label">WhatsApp Integration</span>
+                <div class="value">
+                    Enabled
+                    <span class="badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
                 </div>
             </div>
         </div>
+
+        <!-- Gender -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-venus-mars"></i></div>
+            <div class="info-content">
+                <span class="label">Gender</span>
+                <div class="value editable" id="display_other_gender">Male</div>
+            </div>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
+            <div class="info-content">
+                <span class="label">Date of Birth</span>
+                <div class="value editable" id="display_other_dob">7th July, 2001</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- other details edit modal -->
+ <div class="edit-modal-overlay" id="editOtherModal">
+    <div class="edit-modal-box">
+        <div class="edit-modal-header">
+            <h3>Edit Other Information</h3>
+            <button class="close-modal-btn" id="closeOtherModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="editOtherForm">
+            <div class="edit-modal-body">
+                
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="input_other_phone" class="modal-input">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="input_other_gender" class="modal-input">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <!-- Using text type so you can write "7th July" format, change to type="date" if you prefer -->
+                    <input type="text" id="input_other_dob" class="modal-input" placeholder="e.g. 7th July, 2001">
+                </div>
+
+            </div>
+
+            <div class="edit-modal-footer">
+                <button type="button" class="btn-cancel" id="cancelOtherBtn">Cancel</button>
+                <button type="submit" class="btn-save">Save Details</button>
+            </div>
+        </form>
+    </div>
+</div>
     </div>
             </div>
 </main> 
