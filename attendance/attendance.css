@@ -866,3 +866,174 @@
 .att-modal-footer .att-btn-close-secondary:hover {
   background: #cc410a;
 }
+
+
+/* Metrics */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.icon-sq {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.lbl {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.orange {
+  background: var(--orange-light);
+  color: var(--orange);
+}
+.blue {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+.purple {
+  background: var(--purple-light);
+  color: var(--purple);
+}
+.yellow {
+  background: var(--yellow-light);
+  color: var(--yellow);
+}
+.value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.val {
+  font-size: 22px;
+  font-weight: 700;
+}
+.target {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.mini-progress-bg {
+  width: 100%;
+  height: 4px;
+  background: #f1f5f9;
+  border-radius: 2px;
+}
+.mini-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+.orange-fill {
+  background: var(--orange);
+}
+.yellow-fill {
+  background: var(--yellow);
+}
+.blue-fill {
+  background: var(--blue);
+}
+.purple-fill {
+  background: var(--purple);
+}
+
+/* Timeline */
+.timeline-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+}
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.legend-group {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+.dot.green {
+  background: var(--success);
+}
+.dot.yellow {
+  background: var(--yellow);
+}
+.timeline-track {
+  width: 100%;
+  height: 32px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.segment {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
+.segment.work {
+  background: var(--success);
+}
+.segment.break {
+  background: var(--yellow);
+}
+.time-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Logs */
+.log-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+}
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.log-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.log-table td {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-primary);
+}
