@@ -580,6 +580,29 @@ ul {
   color: var(--primary-orange);
 }
 
+/* --- ACTIVE STATE --- */
+.menu-item.active .menu-link {
+  background: var(--bg-hover, #f0f0f0); /* Added fallback color */
+  color: var(--primary-orange, #ff6b00);
+  font-weight: 700;
+  border-left: 3px solid var(--primary-orange, #ff6b00);
+  /* Optional: Add background transition for smoothness */
+  transition: all 0.3s ease;
+}
+
+.menu-item.active i {
+  color: var(--primary-orange, #ff6b00);
+}
+
+.menu-item .menu-link:hover {
+    background: var(--bg-hover, #f8f9fa);
+    color: var(--primary-orange, #ff6b00);
+}
+
+.menu-item:hover i {
+    color: var(--primary-orange, #ff6b00);
+}
+
 /* --- Collapsed State Adjustments --- */
 .sidebar.collapsed {
   width: 80px;

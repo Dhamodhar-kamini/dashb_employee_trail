@@ -99,6 +99,8 @@ function resetToToday() {
 // Start
 initDropdowns();
 renderCalendar();
+
+
 // Sidebar Toggle
 
 const sidebar = document.getElementById("sidebar");
@@ -281,6 +283,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+
+//nav active element section
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Get the current page URL
+    const currentLocation = window.location.href;
+
+    // 2. Select all menu items and links
+    const menuItems = document.querySelectorAll('.sidebar-menu .menu-item');
+    const menuLinks = document.querySelectorAll('.sidebar-menu .menu-link');
+
+    // 3. Remove 'active' class from ALL items first (cleans up hardcoded HTML)
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // 4. Loop through links to find the match
+    menuLinks.forEach(link => {
+        // Check if the link's destination matches the current URL
+        if (link.href === currentLocation) {
+            // Add 'active' to the parent <li> of the matching link
+            link.closest('.menu-item').classList.add('active');
+        }
+    });
+});
+
 
 // punch in/out section
 document.addEventListener("DOMContentLoaded", () => {
