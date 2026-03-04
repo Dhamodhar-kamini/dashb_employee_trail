@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="bar3.css">
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        
+        <!-- Header -->
+        <div class="dash-header">
+            <div>
+                <h2>Attendance Console</h2>
+                <div class="shift-badge">
+                    <span class="dot-status" id="shiftDot"></span> <span id="shiftText">Loading...</span>
+                </div>
+            </div>
+            
+            <div class="action-panel">
+                <div id="timerDisplay" class="live-timer">00:00:00</div>
+                <!-- Break buttons are mostly manual overrides now, but logic handles fixed slots -->
+                <button class="btn-break" id="btnBreak" onclick="manualBreakToggle()">
+                    <i class="fa-solid fa-mug-hot"></i> <span>Break</span>
+                </button>
+                <button class="btn-main" id="btnPunch" onclick="togglePunch()">
+                    <i class="fa-solid fa-fingerprint"></i> <span>Punch In</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="card-top"><div class="icon-sq orange"><i class="fa-regular fa-clock"></i></div> <span class="lbl">Work Today</span></div>
+                <div class="value-group"><span class="val" id="todayVal">0.00</span> <span class="target">/ 8h</span></div>
+                <div class="mini-progress-bg"><div class="mini-progress-fill orange-fill" id="barToday" style="width: 0%"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="card-top"><div class="icon-sq yellow"><i class="fa-solid fa-utensils"></i></div> <span class="lbl">Break Time</span></div>
+                <div class="value-group"><span class="val" id="breakVal">0m</span> <span class="target">/ 60m</span></div>
+                <div class="mini-progress-bg"><div class="mini-progress-fill yellow-fill" id="barBreak" style="width: 0%"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="card-top"><div class="icon-sq blue"><i class="fa-solid fa-calendar-week"></i></div> <span class="lbl">Weekly</span></div>
+                <div class="value-group"><span class="val" id="weekVal">0</span> <span class="target">h</span></div>
+                <div class="mini-progress-bg"><div class="mini-progress-fill blue-fill" style="width: 40%"></div></div>
+            </div>
+            <div class="metric-card">
+                <div class="card-top"><div class="icon-sq purple"><i class="fa-solid fa-calendar-days"></i></div> <span class="lbl">Monthly</span></div>
+                <div class="value-group"><span class="val" id="monthVal">0</span> <span class="target">h</span></div>
+                <div class="mini-progress-bg"><div class="mini-progress-fill purple-fill" style="width: 60%"></div></div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-panel">
+            <div class="timeline-header">
+                <h3>Activity Timeline (10:00 - 19:00)</h3>
+                <div class="legend-group">
+                    <div class="legend-item"><span class="dot green"></span> Work</div>
+                    <div class="legend-item"><span class="dot yellow"></span> Lunch/Tea</div>
+                </div>
+            </div>
+            <div class="timeline-track-container">
+                <div class="timeline-track" id="timelineTrack"></div>
+                <div class="time-axis">
+                    <!-- Adjusted for 10am start -->
+                    <span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>19:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="log-panel">
+            <h3>Logs</h3>
+            <table class="log-table">
+                <thead><tr><th>Time</th><th>Status</th><th>Note</th></tr></thead>
+                <tbody id="logTableBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="bar3.js"></script>
+</body>
+</html>
