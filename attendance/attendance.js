@@ -1,35 +1,105 @@
-// punch in/out section
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- Elements ---
+    // ==========================================
+    // 1. CONFIGURATION & STATE
+    // ==========================================
+    const SHIFT_START_HR = 10; // 10:00 AM
+    const SHIFT_END_HR = 19;   // 07:00 PM
+    const TOTAL_HOURS = SHIFT_END_HR - SHIFT_START_HR; // 9 hours
+
+    const STORAGE_KEY_HISTORY = "att_history_log"; 
+
+    // State Variables
+    let workTimerInterval = null;
+    let breakTimerInterval = null;
+    
+    let workStartTime = null;
+    let breakStartTime = null;
+    
+    let totalWorkMs = 0;
+    let totalBreakMs = 0;
+    
+    let isWorking = false;
+    let isOnBreak = false;
+    let currentBreakType = ""; // 'lunch' or 'normal'
+
+    // Break Limits (in seconds)
+    const LIMITS = {
+        lunch: 45 * 60, 
+        normal: 15 * 60
+    };
+
+    // Accumulated usage for limits
+    let usage = { lunch: 0, normal: 0 };
+
+    // ==========================================
+    // 2. DOM ELEMENTS
+    // ==========================================
+    
+    // Main Punch Elements
     const punchBtn = document.getElementById("punchBtn");
     const timerDisplay = document.getElementById("timerDisplay");
     const productionDisplay = document.getElementById("productionDisplay");
     const statusMsg = document.getElementById("punchStatusMsg");
     const dateDisplay = document.getElementById("currentDateDisplay");
     
-    const daysGrid = document.getElementById("daysGrid");
-    const calLabel = document.getElementById("calMonthYear");
-    const prevBtn = document.getElementById("prevMonth");
-    const nextBtn = document.getElementById("nextMonth");
-    
-    const modal = document.getElementById("attModal");
-    const viewBtn = document.getElementById("viewAttBtn");
-    const closeBtn = document.getElementById("attCloseBtn");
-    const bottomCloseBtn = document.getElementById("attCloseBtnBottom");
-    const tableBody = document.getElementById("attTableBody");
+    // Break Management Elements
+    const bmEls = {
+        timerDisplay: document.getElementById("bmTimerDisplay"),
+        btnIn: document.getElementById("bmBtnIn"),
+        btnOut: document.getElementById("bmBtnOut"),
+        breakSelect: document.getElementById("bmBreakTypeSelect"),
+        statusBadge: document.getElementById("bmStatusBadge"),
+        limitWarning: document.getElementById("bmLimitWarning"),
+        logTable: document.getElementById("bmLogTableBody"),
+        emptyState: document.getElementById("bmEmptyState"),
+        lunchUsed: document.getElementById("bmLunchUsed"),
+        lunchBar: document.getElementById("bmLunchBar"),
+        normalUsed: document.getElementById("bmNormalUsed"),
+        normalBar: document.getElementById("bmNormalBar"),
+        totalTime: document.getElementById("bmTotalTime"),
+        remainingTime: document.getElementById("bmRemainingTime"),
+    };
 
-    // --- State ---
-    const STORAGE_KEY_DATE = "att_current_date";
-    const STORAGE_KEY_START = "att_start_time";
-    const STORAGE_KEY_END = "att_end_time";
-    const STORAGE_KEY_STATUS = "att_status"; 
-    const STORAGE_KEY_HISTORY = "att_history_log"; 
+    // Metrics & Timeline Elements
+    const metricEls = {
+        todayVal: document.getElementById("todayVal"),
+        barToday: document.getElementById("barToday"),
+        breakVal: document.getElementById("breakVal"),
+        barBreak: document.getElementById("barBreak"),
+        timelineTrack: document.getElementById("timelineTrack"),
+        mainLogBody: document.getElementById("logTableBody")
+    };
 
-    let timerInterval = null;
-    let currentDate = new Date(); 
+    // Calendar Elements
+    const calEls = {
+        grid: document.getElementById("daysGrid"),
+        label: document.getElementById("calMonthYear"),
+        prev: document.getElementById("prevMonth"),
+        next: document.getElementById("nextMonth"),
+        viewBtn: document.getElementById("viewAttBtn"),
+        modal: document.getElementById("attModal"),
+        closeBtn: document.getElementById("attCloseBtn"),
+        bottomCloseBtn: document.getElementById("attCloseBtnBottom"),
+        tableBody: document.getElementById("attTableBody")
+    };
 
-    // --- 1. Header Time ---
+    let currentDate = new Date(); // For Calendar
+
+    // ==========================================
+    // 3. HELPER FUNCTIONS
+    // ==========================================
+
+    function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    function pad(n) { return n < 10 ? "0" + n : n; }
+
     function updateHeaderTime() {
         const now = new Date();
         if(dateDisplay) {
@@ -42,23 +112,283 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateHeaderTime, 1000);
     updateHeaderTime();
 
-    // --- 2. Timer & Punch Logic ---
-    function formatTime(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const h = Math.floor(totalSeconds / 3600);
-        const m = Math.floor((totalSeconds % 3600) / 60);
-        const s = totalSeconds % 60;
-        return `${pad(h)}:${pad(m)}:${pad(s)}`;
-    }
-    function pad(n) { return n < 10 ? "0" + n : n; }
-
-    function updateTimerUI(elapsedMs) {
-        if(timerDisplay) timerDisplay.innerText = formatTime(elapsedMs);
-        if(productionDisplay) productionDisplay.innerText = `Active : ${(elapsedMs / 3600000).toFixed(2)} hrs`;
+    // Add row to Bottom Log Panel
+    function addMainLog(status, note) {
+        const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
+        const row = `<tr><td>${timeStr}</td><td><strong>${status}</strong></td><td>${note}</td></tr>`;
+        if(metricEls.mainLogBody) {
+            metricEls.mainLogBody.innerHTML = row + metricEls.mainLogBody.innerHTML;
+        }
     }
 
-    function saveToHistory(status, inTime, outTime) {
-        const todayKey = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD format
+    // Update Timeline Visual
+    function updateTimeline() {
+        if (!isWorking && !isOnBreak) return;
+
+        const now = new Date();
+        // Calculate current time as decimal (e.g., 10:30 = 10.5)
+        const currentDecimal = now.getHours() + (now.getMinutes() / 60) + (now.getSeconds() / 3600);
+        
+        // Map 10:00 (Start) -> 0% and 19:00 (End) -> 100%
+        let percent = ((currentDecimal - SHIFT_START_HR) / TOTAL_HOURS) * 100;
+        
+        // Clamp between 0 and 100
+        percent = Math.max(0, Math.min(100, percent));
+
+        const seg = document.createElement('div');
+        // 'green' class for work, 'yellow' class for break
+        seg.className = isOnBreak ? 'timeline-segment yellow' : 'timeline-segment green';
+        seg.style.left = percent + '%';
+        // Small width creates the growing bar effect over time
+        seg.style.width = '0.2%'; 
+        
+        if(metricEls.timelineTrack) {
+            metricEls.timelineTrack.appendChild(seg);
+        }
+    }
+
+    // ==========================================
+    // 4. WORK TIMER LOGIC
+    // ==========================================
+
+    function startWorkTimer() {
+        if(workTimerInterval) clearInterval(workTimerInterval);
+        
+        workStartTime = Date.now();
+        isWorking = true;
+        isOnBreak = false;
+
+        // UI Updates
+        punchBtn.innerText = "Punch Out";
+        punchBtn.classList.add("mode-out");
+        statusMsg.innerHTML = `<i class="fa-solid fa-clock"></i> Currently working...`;
+        statusMsg.style.color = "#ff6b00";
+
+        // Enable Break Controls
+        bmEls.btnIn.disabled = false;
+        bmEls.breakSelect.disabled = false;
+
+        workTimerInterval = setInterval(() => {
+            const now = Date.now();
+            const currentSessionMs = now - workStartTime;
+            const totalDisplayMs = totalWorkMs + currentSessionMs;
+            
+            // Update Main Timer
+            timerDisplay.innerText = formatTime(totalDisplayMs);
+            productionDisplay.innerText = `Active : ${(totalDisplayMs / 3600000).toFixed(2)} hrs`;
+            
+            // Update Metrics (Work Today)
+            const hrs = totalDisplayMs / 3600000;
+            metricEls.todayVal.innerText = hrs.toFixed(2);
+            // 8 hours target
+            metricEls.barToday.style.width = Math.min((hrs / 8) * 100, 100) + '%';
+
+            updateTimeline();
+
+        }, 1000);
+    }
+
+    function pauseWorkTimer() {
+        if(workTimerInterval) clearInterval(workTimerInterval);
+        if(isWorking) {
+            totalWorkMs += Date.now() - workStartTime;
+        }
+        isWorking = false;
+    }
+
+    // ==========================================
+    // 5. BREAK TIMER LOGIC
+    // ==========================================
+
+    if (bmEls.btnIn) {
+        bmEls.btnIn.addEventListener("click", () => {
+            if(!isWorking && totalWorkMs === 0) {
+                alert("Please Punch In first to start work!");
+                return;
+            }
+
+            // 1. Pause Work Timer
+            pauseWorkTimer();
+            statusMsg.innerHTML = `<i class="fa-solid fa-mug-hot"></i> On Break...`;
+            statusMsg.style.color = "#FF5B1E"; // Orange
+            isOnBreak = true;
+            
+            // 2. Start Break Logic
+            breakStartTime = Date.now();
+            currentBreakType = bmEls.breakSelect.value;
+            const typeLabel = currentBreakType === "lunch" ? "Lunch Break" : "Normal Break";
+
+            // UI Swaps
+            bmEls.btnIn.style.display = "none";
+            bmEls.btnOut.style.display = "flex";
+            bmEls.breakSelect.disabled = true;
+            punchBtn.disabled = true; // Cannot punch out during break
+
+            bmEls.statusBadge.textContent = `On ${typeLabel}`;
+            bmEls.statusBadge.className = "bm-badge bm-badge-primary";
+
+            addMainLog("Break Started", typeLabel);
+
+            // 3. Start Break Interval
+            if (breakTimerInterval) clearInterval(breakTimerInterval);
+            breakTimerInterval = setInterval(() => {
+                const now = Date.now();
+                const currentBreakMs = now - breakStartTime;
+                const totalDisplayMs = totalBreakMs + currentBreakMs;
+
+                // Update Break Timer Circle
+                const diffInSeconds = Math.floor(currentBreakMs / 1000);
+                bmEls.timerDisplay.textContent = formatTime(currentBreakMs);
+                
+                // Check Limits
+                const limitSec = LIMITS[currentBreakType];
+                const usedSec = usage[currentBreakType] + diffInSeconds;
+                
+                if (usedSec > limitSec) {
+                    bmEls.timerDisplay.style.color = "#d32f2f"; // Red
+                    bmEls.limitWarning.style.display = "block";
+                }
+
+                updateTimeline(); // Draws yellow segments
+
+            }, 1000);
+        });
+    }
+
+    if (bmEls.btnOut) {
+        bmEls.btnOut.addEventListener("click", () => {
+            // 1. Stop Break Timer
+            clearInterval(breakTimerInterval);
+            const endTime = Date.now();
+            const durationMs = endTime - breakStartTime;
+            const durationSec = Math.floor(durationMs / 1000);
+
+            // Accumulate Data
+            totalBreakMs += durationMs;
+            usage[currentBreakType] += durationSec;
+            
+            // 2. Resume Work Timer
+            isOnBreak = false;
+            startWorkTimer(); // Resume working
+            addMainLog("Break Ended", "Resumed Work");
+
+            // UI Resets
+            bmEls.btnIn.style.display = "flex";
+            bmEls.btnOut.style.display = "none";
+            bmEls.breakSelect.disabled = false;
+            punchBtn.disabled = false; // Enable punch out button
+
+            bmEls.timerDisplay.textContent = "00:00:00";
+            bmEls.timerDisplay.style.color = "#333";
+            bmEls.limitWarning.style.display = "none";
+            bmEls.statusBadge.textContent = "Not Active";
+            bmEls.statusBadge.className = "bm-badge bm-badge-light";
+
+            // Update Logs & Stats
+            bmAddToHistoryLog(currentBreakType, breakStartTime, endTime, durationSec);
+            bmUpdateProgressStats();
+        });
+    }
+
+    // ==========================================
+    // 6. MAIN PUNCH BUTTON LOGIC
+    // ==========================================
+
+    punchBtn.addEventListener("click", () => {
+        const nowStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        if (!isWorking && !isOnBreak && totalWorkMs === 0) {
+            // PUNCH IN
+            startWorkTimer();
+            addMainLog("Punch In", "Shift Started");
+            saveCalendarHistory('Present', nowStr, '-');
+        } 
+        else if (isWorking) {
+            // PUNCH OUT
+            pauseWorkTimer();
+            
+            punchBtn.innerText = "Shift Completed";
+            punchBtn.disabled = true;
+            statusMsg.innerHTML = `<i class="fa-solid fa-check-circle"></i> Punch out recorded`;
+            statusMsg.style.color = "#4caf50";
+
+            // Disable Break Buttons
+            bmEls.btnIn.disabled = true;
+            bmEls.breakSelect.disabled = true;
+
+            const startObj = new Date(workStartTime); // Approx start
+            // (In real app, store original start time separately)
+            addMainLog("Punch Out", "Shift Ended");
+            
+            // Update History (Ideally you update the existing row, here we just push a new one for demo)
+            // Or overwrite the last entry for today
+            saveCalendarHistory('Present', "10:00 AM", nowStr); // Using mock start time for demo
+        }
+    });
+
+    // ==========================================
+    // 7. STATS & HISTORY HELPERS
+    // ==========================================
+
+    function bmUpdateProgressStats() {
+        const totalSec = usage.lunch + usage.normal;
+        
+        // Update Bars
+        const lunchMins = Math.floor(usage.lunch / 60);
+        const lunchPct = Math.min((usage.lunch / LIMITS.lunch) * 100, 100);
+        bmEls.lunchUsed.textContent = lunchMins;
+        bmEls.lunchBar.style.width = `${lunchPct}%`;
+        if (lunchPct >= 100) bmEls.lunchBar.style.backgroundColor = "#d32f2f";
+
+        const normalMins = Math.floor(usage.normal / 60);
+        const normalPct = Math.min((usage.normal / LIMITS.normal) * 100, 100);
+        bmEls.normalUsed.textContent = normalMins;
+        bmEls.normalBar.style.width = `${normalPct}%`;
+        if (normalPct >= 100) bmEls.normalBar.style.backgroundColor = "#d32f2f";
+
+        // Total Break Metrics
+        const totalBreakMins = Math.floor(totalSec / 60);
+        metricEls.breakVal.innerText = totalBreakMins + 'm';
+        metricEls.barBreak.style.width = Math.min((totalBreakMins / 60) * 100, 100) + '%';
+        
+        bmEls.totalTime.textContent = `${Math.floor(totalSec/3600)}h ${Math.floor((totalSec%3600)/60)}m`;
+        
+        const maxLimitMins = (LIMITS.lunch + LIMITS.normal) / 60;
+        const remaining = Math.max(0, maxLimitMins - totalBreakMins);
+        bmEls.remainingTime.textContent = `${remaining}m`;
+    }
+
+    function bmAddToHistoryLog(type, start, end, duration) {
+        if (bmEls.emptyState) bmEls.emptyState.style.display = "none";
+
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        const timeStartStr = startDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const timeEndStr = endDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const durStr = formatTime(duration * 1000);
+        const typeLabel = type === "lunch" ? "Lunch Break" : "Normal Break";
+
+        const limitSec = LIMITS[type];
+        let statusHtml = '<span class="bm-badge bm-badge-success">On Time</span>';
+        if (duration > limitSec) statusHtml = '<span class="bm-badge bm-badge-danger">Overtime</span>';
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><span style="font-weight:500">${typeLabel}</span></td>
+            <td>${timeStartStr}</td>
+            <td>${timeEndStr}</td>
+            <td style="font-family:monospace; font-weight:600">${durStr}</td>
+            <td>${statusHtml}</td>
+        `;
+        bmEls.logTable.prepend(row);
+    }
+
+    // ==========================================
+    // 8. CALENDAR & MODAL LOGIC (Existing)
+    // ==========================================
+    
+    function saveCalendarHistory(status, inTime, outTime) {
+        const todayKey = new Date().toLocaleDateString('en-CA');
         let history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || {};
         
         history[todayKey] = {
@@ -68,568 +398,90 @@ document.addEventListener("DOMContentLoaded", () => {
             outTime: outTime
         };
         localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
-        renderCalendar(); 
+        renderCalendar();
     }
 
-    function setButtonState(state) {
-        punchBtn.classList.remove("mode-out");
-        punchBtn.disabled = false;
-
-        if (state === 'new') {
-            punchBtn.innerText = "Punch In";
-            statusMsg.innerHTML = `<i class="fa-solid fa-fingerprint"></i> Not punched in yet`;
-            statusMsg.style.color = "#999";
-        } else if (state === 'in') {
-            punchBtn.innerText = "Punch Out";
-            // No class added, keeps it orange
-            statusMsg.innerHTML = `<i class="fa-solid fa-clock"></i> Currently working...`;
-            statusMsg.style.color = "#ff6b00";
-        } else if (state === 'completed') {
-            punchBtn.innerText = "Shift Completed";
-            punchBtn.disabled = true; // This triggers the CSS disabled state
-            statusMsg.innerHTML = `<i class="fa-solid fa-check-circle"></i> Punch out recorded`;
-            statusMsg.style.color = "#2ecc71";
-        }
-    }
-
-    // Logic to reset day if it's a new date
-    function checkAndResetDay() {
-        const savedDate = localStorage.getItem(STORAGE_KEY_DATE);
-        const today = new Date().toLocaleDateString('en-CA');
-
-        if (savedDate !== today) {
-            localStorage.setItem(STORAGE_KEY_DATE, today);
-            localStorage.removeItem(STORAGE_KEY_START);
-            localStorage.removeItem(STORAGE_KEY_END);
-            localStorage.setItem(STORAGE_KEY_STATUS, 'new');
-            return 'new';
-        }
-        return localStorage.getItem(STORAGE_KEY_STATUS) || 'new';
-    }
-
-    function startTicker(startTime) {
-        if (timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            updateTimerUI(Date.now() - startTime);
-        }, 1000);
-    }
-
-    function initPunchSystem() {
-        const status = checkAndResetDay();
-        const startTime = parseInt(localStorage.getItem(STORAGE_KEY_START));
-        const endTime = parseInt(localStorage.getItem(STORAGE_KEY_END));
-
-        setButtonState(status);
-
-        if (status === 'in' && startTime) {
-            startTicker(startTime);
-        } else if (status === 'completed' && startTime && endTime) {
-            updateTimerUI(endTime - startTime);
-        } else {
-            updateTimerUI(0);
-        }
-    }
-
-    if(punchBtn) {
-        punchBtn.addEventListener("click", () => {
-            const status = localStorage.getItem(STORAGE_KEY_STATUS);
-            const now = Date.now();
-            const timeStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
-            if (status === 'new') {
-                localStorage.setItem(STORAGE_KEY_START, now);
-                localStorage.setItem(STORAGE_KEY_STATUS, 'in');
-                setButtonState('in');
-                startTicker(now);
-                saveToHistory('Present', timeStr, '-');
-            } 
-            else if (status === 'in') {
-                localStorage.setItem(STORAGE_KEY_END, now);
-                localStorage.setItem(STORAGE_KEY_STATUS, 'completed');
-                clearInterval(timerInterval);
-                const startT = parseInt(localStorage.getItem(STORAGE_KEY_START));
-                updateTimerUI(now - startT);
-                setButtonState('completed');
-                
-                const startObj = new Date(startT);
-                const inTimeStr = startObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                saveToHistory('Present', inTimeStr, timeStr);
-            }
-        });
-    }
-
-    // --- 3. Calendar Logic (Fixed) ---
     function renderCalendar() {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-        
-        // Label Color Fix happens in CSS, but ensure text is set here
-        calLabel.innerText = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
-        daysGrid.innerHTML = "";
+        if(calEls.label) calEls.label.innerText = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+        if(calEls.grid) {
+            calEls.grid.innerHTML = "";
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || {};
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const todayKey = new Date().toLocaleDateString('en-CA');
 
-        const history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || {};
-        
-        // 1. Get first day of month (0 = Sunday, 1 = Monday, etc.)
-        const firstDayIndex = new Date(year, month, 1).getDay();
-        
-        // 2. Get number of days in month
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        // 3. Today's Date Key
-        const todayKey = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
-
-        // 4. Create Empty Padding Cells
-        for (let i = 0; i < firstDayIndex; i++) {
-            const div = document.createElement("div");
-            div.classList.add("day-cell", "faded"); 
-            daysGrid.appendChild(div);
-        }
-
-        // 5. Create Actual Days
-        for (let i = 1; i <= daysInMonth; i++) {
-            const div = document.createElement("div");
-            div.classList.add("day-cell");
-            div.innerText = i;
-
-            // Construct Key: YYYY-MM-DD
-            // Important: Handle Timezone offset by using local parts
-            const currentMonthStr = String(month + 1).padStart(2, '0');
-            const currentDayStr = String(i).padStart(2, '0');
-            const dateKey = `${year}-${currentMonthStr}-${currentDayStr}`;
-
-            if (dateKey === todayKey) div.classList.add("today");
-            
-            // Check History (ensure exact string match)
-            if (history[dateKey]) {
-                div.classList.add("present");
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement("div");
+                div.classList.add("day-cell", "faded"); 
+                calEls.grid.appendChild(div);
             }
 
-            daysGrid.appendChild(div);
+            for (let i = 1; i <= daysInMonth; i++) {
+                const div = document.createElement("div");
+                div.classList.add("day-cell");
+                div.innerText = i;
+                
+                const mStr = String(month + 1).padStart(2, '0');
+                const dStr = String(i).padStart(2, '0');
+                const dateKey = `${year}-${mStr}-${dStr}`;
+
+                if (dateKey === todayKey) div.classList.add("today");
+                if (history[dateKey]) div.classList.add("present");
+
+                calEls.grid.appendChild(div);
+            }
         }
     }
 
-    if(prevBtn) prevBtn.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
-    if(nextBtn) nextBtn.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+    if(calEls.prev) calEls.prev.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+    if(calEls.next) calEls.next.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
 
-    // --- 4. Modal Logic ---
+    // Modal
     function loadHistoryTable() {
         const history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || {};
-        tableBody.innerHTML = "";
-        
+        calEls.tableBody.innerHTML = "";
         const rows = Object.values(history).sort((a,b) => new Date(b.date) - new Date(a.date));
 
         if(rows.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#999;">No records found</td></tr>`;
+            calEls.tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#999;">No records found</td></tr>`;
             return;
         }
 
         rows.forEach(row => {
             const tr = document.createElement("tr");
-            let badgeClass = 'status-present'; 
-            if (row.status && row.status.toLowerCase().includes('absent')) badgeClass = 'status-absent';
-
-            // Safe date formatting
-            const [y, m, d] = row.date.split('-');
-            const dateObj = new Date(y, m-1, d); // Construct safely without timezone issues
+            let badgeClass = row.status.toLowerCase().includes('absent') ? 'status-absent' : 'status-present';
+            const dateObj = new Date(row.date);
             const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
             tr.innerHTML = `
                 <td>${formattedDate}</td>
                 <td><span class="status-pill ${badgeClass}">${row.status}</span></td>
-                <td style="font-family:monospace; color:#333;">${row.inTime}</td>
-                <td style="font-family:monospace; color:#333;">${row.outTime}</td>
+                <td style="font-family:monospace;">${row.inTime}</td>
+                <td style="font-family:monospace;">${row.outTime}</td>
             `;
-            tableBody.appendChild(tr);
+            calEls.tableBody.appendChild(tr);
         });
     }
 
-    if(viewBtn) {
-        viewBtn.addEventListener("click", () => {
-            loadHistoryTable();
-            modal.classList.add("show");
-        });
-    }
+    if(calEls.viewBtn) calEls.viewBtn.addEventListener("click", () => { loadHistoryTable(); calEls.modal.classList.add("show"); });
+    const closeModal = () => calEls.modal.classList.remove("show");
+    if(calEls.closeBtn) calEls.closeBtn.addEventListener("click", closeModal);
+    if(calEls.bottomCloseBtn) calEls.bottomCloseBtn.addEventListener("click", closeModal);
+    window.addEventListener("click", (e) => { if (e.target === calEls.modal) closeModal(); });
 
-    const closeModal = () => modal.classList.remove("show");
-    if(closeBtn) closeBtn.addEventListener("click", closeModal);
-    if(bottomCloseBtn) bottomCloseBtn.addEventListener("click", closeModal);
-    window.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-
-    // Initialize
-    initPunchSystem();
+    // Initialize Calendar
     renderCalendar();
-});
 
-// breakmanagement section
-document.addEventListener("DOMContentLoaded", () => {
-  const BM_LIMITS = {
-    lunch: 45, // minutes
-    normal: 15, // minutes
-  };
+    // Ensure CSS for Timeline Segments
+    // Add this minimal style injection just in case the CSS is missing for .timeline-segment
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .timeline-segment { position: absolute; height: 100%; top: 0; }
+        .timeline-segment.green { background-color: #4caf50; }
+        .timeline-segment.yellow { background-color: #ffb300; }
+    `;
+    document.head.appendChild(style);
 
-  let bmTimerInterval = null;
-  let bmStartTime = null;
-  let bmIsBreakActive = false;
-  let bmUsage = { lunch: 0, normal: 0 };
-
-  const bmEls = {
-    timerDisplay: document.getElementById("bmTimerDisplay"),
-    btnIn: document.getElementById("bmBtnIn"),
-    btnOut: document.getElementById("bmBtnOut"),
-    breakSelect: document.getElementById("bmBreakTypeSelect"),
-    statusBadge: document.getElementById("bmStatusBadge"),
-    limitWarning: document.getElementById("bmLimitWarning"),
-    logTable: document.getElementById("bmLogTableBody"),
-    emptyState: document.getElementById("bmEmptyState"),
-    lunchUsed: document.getElementById("bmLunchUsed"),
-    lunchBar: document.getElementById("bmLunchBar"),
-    normalUsed: document.getElementById("bmNormalUsed"),
-    normalBar: document.getElementById("bmNormalBar"),
-    totalTime: document.getElementById("bmTotalTime"),
-    remainingTime: document.getElementById("bmRemainingTime"),
-  };
-
-  if (bmEls.btnIn) {
-    bmEls.btnIn.addEventListener("click", () => {
-      bmIsBreakActive = true;
-      bmStartTime = Date.now();
-      const type = bmEls.breakSelect.value;
-      const typeLabel = type === "lunch" ? "Lunch Break" : "Normal Break";
-
-      bmEls.btnIn.style.display = "none";
-      bmEls.btnOut.style.display = "flex";
-      bmEls.breakSelect.disabled = true;
-
-      bmEls.statusBadge.textContent = `On ${typeLabel}`;
-      bmEls.statusBadge.className = "bm-badge bm-badge-primary";
-
-      if (bmTimerInterval) clearInterval(bmTimerInterval);
-      bmTimerInterval = setInterval(() => {
-        bmUpdateTimerDisplay();
-        bmCheckLimits();
-      }, 1000);
-    });
-  }
-
-  if (bmEls.btnOut) {
-    bmEls.btnOut.addEventListener("click", () => {
-      if (!bmIsBreakActive) return;
-
-      clearInterval(bmTimerInterval);
-      const endTime = Date.now();
-      const durationSeconds = Math.floor((endTime - bmStartTime) / 1000);
-      const type = bmEls.breakSelect.value;
-
-      bmUsage[type] += durationSeconds;
-      bmIsBreakActive = false;
-
-      bmEls.btnIn.style.display = "flex";
-      bmEls.btnOut.style.display = "none";
-      bmEls.breakSelect.disabled = false;
-
-      bmEls.timerDisplay.textContent = "00:00:00";
-      bmEls.timerDisplay.style.color = "var(--bm-dark)";
-      bmEls.limitWarning.style.display = "none";
-
-      bmEls.statusBadge.textContent = "Not Active";
-      bmEls.statusBadge.className = "bm-badge bm-badge-light";
-
-      bmAddToHistoryLog(type, bmStartTime, endTime, durationSeconds);
-      bmUpdateProgressStats();
-    });
-  }
-
-  function bmUpdateTimerDisplay() {
-    const now = Date.now();
-    const diffInSeconds = Math.floor((now - bmStartTime) / 1000);
-    bmEls.timerDisplay.textContent = bmFormatTime(diffInSeconds);
-  }
-
-  function bmCheckLimits() {
-    const type = bmEls.breakSelect.value;
-    const limitInSeconds = BM_LIMITS[type] * 60;
-    const now = Date.now();
-    const currentSessionSeconds = Math.floor((now - bmStartTime) / 1000);
-    const totalUsedSoFar = bmUsage[type] + currentSessionSeconds;
-
-    if (totalUsedSoFar > limitInSeconds) {
-      bmEls.timerDisplay.style.color = "var(--bm-danger)";
-      bmEls.limitWarning.style.display = "block";
-    }
-  }
-
-  function bmUpdateProgressStats() {
-    const lunchMins = Math.floor(bmUsage.lunch / 60);
-    const lunchPct = Math.min(
-      (bmUsage.lunch / (BM_LIMITS.lunch * 60)) * 100,
-      100,
-    );
-    bmEls.lunchUsed.textContent = lunchMins;
-    bmEls.lunchBar.style.width = `${lunchPct}%`;
-    if (lunchPct >= 100)
-      bmEls.lunchBar.style.backgroundColor = "var(--bm-danger)";
-
-    const normalMins = Math.floor(bmUsage.normal / 60);
-    const normalPct = Math.min(
-      (bmUsage.normal / (BM_LIMITS.normal * 60)) * 100,
-      100,
-    );
-    bmEls.normalUsed.textContent = normalMins;
-    bmEls.normalBar.style.width = `${normalPct}%`;
-    if (normalPct >= 100)
-      bmEls.normalBar.style.backgroundColor = "var(--bm-danger)";
-
-    const totalSec = bmUsage.lunch + bmUsage.normal;
-    const totalH = Math.floor(totalSec / 3600);
-    const totalM = Math.floor((totalSec % 3600) / 60);
-    bmEls.totalTime.textContent = `${totalH}h ${totalM}m`;
-
-    const maxLimitMins = BM_LIMITS.lunch + BM_LIMITS.normal;
-    const usedTotalMins = Math.floor(totalSec / 60);
-    const remaining = Math.max(0, maxLimitMins - usedTotalMins);
-    bmEls.remainingTime.textContent = `${remaining}m`;
-  }
-
-  function bmAddToHistoryLog(type, start, end, duration) {
-    if (bmEls.emptyState) bmEls.emptyState.style.display = "none";
-
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-
-    const timeStartStr = startDate.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const timeEndStr = endDate.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const durStr = bmFormatTime(duration);
-
-    const typeLabel = type === "lunch" ? "Lunch Break" : "Normal Break";
-    const limitSec = BM_LIMITS[type] * 60;
-
-    let statusHtml = '<span class="bm-badge bm-badge-success">On Time</span>';
-    if (duration > limitSec) {
-      statusHtml = '<span class="bm-badge bm-badge-danger">Overtime</span>';
-    }
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-            <td>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid ${type === "lunch" ? "fa-utensils" : "fa-mug-hot"}" style="color:var(--bm-text-muted)"></i>
-                    <span style="font-weight:500">${typeLabel}</span>
-                </div>
-            </td>
-            <td>${timeStartStr}</td>
-            <td>${timeEndStr}</td>
-            <td style="font-family:monospace; font-weight:600">${durStr}</td>
-            <td>${statusHtml}</td>
-        `;
-
-    bmEls.logTable.prepend(row);
-  }
-
-  function bmFormatTime(totalSeconds) {
-    const h = Math.floor(totalSeconds / 3600)
-      .toString()
-      .padStart(2, "0");
-    const m = Math.floor((totalSeconds % 3600) / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = Math.floor(totalSeconds % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  }
-});
-
-
-//attendance console
-document.addEventListener('DOMContentLoaded', () => {
-
-    // --- Shift Configuration ---
-    const SHIFT_START_HR = 10; // 10:00 AM
-    const SHIFT_END_HR = 19;   // 07:00 PM
-    const TOTAL_HOURS = SHIFT_END_HR - SHIFT_START_HR; // 9 hours span
-
-    // Break Slots (24h format)
-    const LUNCH_START = 13.00; // 1:00 PM
-    const LUNCH_END = 13.75;   // 1:45 PM (45 mins = 0.75 hrs)
-    const TEA_START = 16.75;   // 4:45 PM
-    const TEA_END = 17.00;     // 5:00 PM
-
-    // --- State ---
-    let state = 'OUT'; // OUT, WORK, BREAK_AUTO, BREAK_MANUAL
-    let startTime = null;
-    let timerInterval = null;
-    
-    // Counters
-    let workSecs = 0;
-    let breakSecs = 0;
-
-    // --- DOM ---
-    const els = {
-        timer: document.getElementById('timerDisplay'),
-        btnPunch: document.getElementById('btnPunch'),
-        btnBreak: document.getElementById('btnBreak'),
-        todayVal: document.getElementById('todayVal'),
-        breakVal: document.getElementById('breakVal'),
-        track: document.getElementById('timelineTrack'),
-        log: document.getElementById('logTableBody'),
-        barToday: document.getElementById('barToday'),
-        barBreak: document.getElementById('barBreak'),
-        shiftText: document.getElementById('shiftText'),
-        shiftDot: document.getElementById('shiftDot')
-    };
-
-    // --- 1. Init Shift Check ---
-    function checkShiftValidity() {
-        const today = new Date();
-        const day = today.getDay(); // 0=Sun, 6=Sat
-        const date = today.getDate();
-        
-        let isHoliday = false;
-
-        // Saturday Logic (2nd & 4th are holidays)
-        if (day === 6) {
-            const weekNum = Math.ceil(date / 7);
-            if (weekNum === 2 || weekNum === 4) isHoliday = true;
-        } 
-        // Sunday Logic
-        else if (day === 0) {
-            isHoliday = true;
-        }
-
-        if (isHoliday) {
-            els.shiftText.innerText = "Holiday (Off)";
-            els.shiftDot.className = "dot-status red";
-            els.btnPunch.disabled = true;
-            els.btnPunch.innerText = "Holiday";
-        } else {
-            els.shiftText.innerText = "Working Day (10:00 - 19:00)";
-            els.shiftDot.className = "dot-status green";
-        }
-    }
-
-    // --- 2. Action Handlers ---
-    window.togglePunch = function() {
-        if (state === 'OUT') {
-            // Check Time (Optional: Only allow after 10am?)
-            // For now, we allow punch anytime for testing
-            state = 'WORK';
-            startTime = new Date();
-            
-            // UI
-            els.btnPunch.innerHTML = '<i class="fa-solid fa-power-off"></i> Punch Out';
-            els.btnPunch.classList.add('punched-in');
-            addLog("Checked In", "Shift Started");
-            
-            startTicker();
-        } else {
-            // Stop
-            clearInterval(timerInterval);
-            state = 'OUT';
-            els.btnPunch.innerHTML = '<i class="fa-solid fa-fingerprint"></i> Punch In';
-            els.btnPunch.classList.remove('punched-in');
-            addLog("Checked Out", "Shift Ended");
-        }
-    };
-
-    window.manualBreakToggle = function() {
-        if (state === 'WORK') {
-            state = 'BREAK_MANUAL';
-            els.btnBreak.classList.add('active');
-            addLog("Manual Break", "Paused");
-        } else if (state === 'BREAK_MANUAL') {
-            state = 'WORK';
-            els.btnBreak.classList.remove('active');
-            addLog("Work Resumed", "Manual Break Ended");
-        }
-    };
-
-    // --- 3. Main Loop (Runs every second) ---
-    function startTicker() {
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            const now = new Date();
-            const currentDecimalTime = now.getHours() + (now.getMinutes() / 60);
-
-            // AUTO BREAK DETECTION
-            const isLunch = currentDecimalTime >= LUNCH_START && currentDecimalTime < LUNCH_END;
-            const isTea = currentDecimalTime >= TEA_START && currentDecimalTime < TEA_END;
-
-            if (isLunch || isTea) {
-                // If we were working, switch to auto break mode
-                if (state === 'WORK') {
-                    state = 'BREAK_AUTO';
-                    addLog("Auto Break", isLunch ? "Lunch Time (1-1:45)" : "Tea Time (4:45-5)");
-                }
-            } else {
-                // If break time is over, resume work automatically
-                if (state === 'BREAK_AUTO') {
-                    state = 'WORK';
-                    addLog("Auto Resume", "Break Slot Ended");
-                }
-            }
-
-            // --- Time Accumulation ---
-            if (state === 'WORK') {
-                workSecs++;
-                els.timer.innerText = formatHHMMSS(workSecs);
-                updateStats();
-                renderLiveSegment(currentDecimalTime, 'work');
-            } 
-            else if (state.includes('BREAK')) {
-                breakSecs++;
-                updateStats();
-                renderLiveSegment(currentDecimalTime, 'break');
-            }
-
-        }, 1000);
-    }
-
-    // --- 4. Render Logic ---
-    function updateStats() {
-        // Today Hours
-        const hrs = workSecs / 3600;
-        els.todayVal.innerText = hrs.toFixed(2);
-        els.barToday.style.width = Math.min((hrs / 8) * 100, 100) + '%'; // 8h active target
-
-        // Break Mins
-        const mins = Math.floor(breakSecs / 60);
-        els.breakVal.innerText = mins + 'm';
-        els.barBreak.style.width = Math.min((mins / 60) * 100, 100) + '%';
-    }
-
-    function renderLiveSegment(currentTimeDec, type) {
-        // Calculate position based on 10am start
-        // Map: 10am -> 0%, 19pm -> 100%
-        const percent = ((currentTimeDec - SHIFT_START_HR) / TOTAL_HOURS) * 100;
-        
-        // This is a simplified "Growing Bar" visualization
-        // In a full app, you'd push segments array to prevent overlapping divs
-        // Here we just append small slices for the effect
-        const seg = document.createElement('div');
-        seg.className = `segment ${type}`;
-        seg.style.left = percent + '%';
-        seg.style.width = '0.5%'; // Tiny slice added every update
-        els.track.appendChild(seg);
-    }
-
-    // --- Helpers ---
-    function formatHHMMSS(s) {
-        const h = Math.floor(s / 3600).toString().padStart(2,'0');
-        const m = Math.floor((s % 3600) / 60).toString().padStart(2,'0');
-        const sec = (s % 60).toString().padStart(2,'0');
-        return `${h}:${m}:${sec}`;
-    }
-
-    function addLog(status, note) {
-        const row = `<tr><td>${new Date().toLocaleTimeString()}</td><td><strong>${status}</strong></td><td>${note}</td></tr>`;
-        els.log.innerHTML = row + els.log.innerHTML;
-    }
-
-    checkShiftValidity();
 });
