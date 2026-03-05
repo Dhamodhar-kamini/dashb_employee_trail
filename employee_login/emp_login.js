@@ -3,5 +3,5 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     // Redirect to user.html
-    window.location.href = '../employee_page/employee.html';
+    window.location.href = '../dashboard/dashboard.html';
 });

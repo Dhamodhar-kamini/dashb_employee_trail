@@ -165,6 +165,231 @@
 }
 
 
+/* notification and profile popup  */
+/* --- GLOBAL RESET FOR COMPONENT --- */
+.db-top-header-section {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: white;
+    padding: 15px 30px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    margin: 50px auto; /* Centered for demo */
+    width: fit-content;
+}
+
+.db-widget-wrapper {
+    position: relative;
+}
+
+/* --- BUTTON STYLES --- */
+
+/* Notification Bell */
+.db-icon-btn {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #555;
+    transition: 0.2s;
+    position: relative;
+}
+
+.db-icon-btn:hover, .db-icon-btn.db-active-state {
+    background: #FFF5F1;
+    color: #FF5B1E;
+    border-color: #FF5B1E;
+}
+
+/* Profile Image Button */
+.db-profile-trigger-btn {
+    background: none;
+    border: 2px solid transparent;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s;
+}
+
+.db-profile-trigger-btn img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.db-profile-trigger-btn:hover, .db-profile-trigger-btn.db-active-state {
+    border-color: #FF5B1E;
+    transform: scale(1.05);
+}
+
+/* Online Dot */
+.db-online-dot {
+    position: absolute;
+    bottom: 2px; right: 2px;
+    width: 10px; height: 10px;
+    background: #50CD89;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+/* Red Counter Badge */
+.db-notif-badge {
+    position: absolute;
+    top: -2px; right: -2px;
+    background: #FF3B30;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+
+/* --- SHARED DROPDOWN STYLES --- */
+.db-dropdown-card {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid #f0f0f0;
+    display: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+/* Class added by JS to show menu */
+.db-dropdown-card.db-show-menu {
+    display: block;
+    animation: db-popIn-anim 0.2s ease-out;
+}
+
+.db-card-header {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    background: #fafafa;
+}
+
+/* --- NOTIFICATION ITEMS --- */
+.db-notif-item {
+    padding: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    cursor: pointer;
+}
+.db-notif-item:hover { background: #f9f9f9; }
+
+.db-notif-symbol {
+    width: 35px; height: 35px;
+    background: #E8FFF3; color: #50CD89;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+}
+
+.db-symbol-alert {
+    background: #FFF5F8; color: #F1416C;
+}
+
+.db-notif-text h4 { margin: 0 0 4px; font-size: 13px; color: #222; }
+.db-notif-text p { margin: 0; font-size: 12px; color: #888; }
+.db-time-ago { font-size: 10px; color: #aaa; display: block; margin-top: 5px; }
+
+/* --- PROFILE MENU ITEMS --- */
+.db-profile-header-info {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.db-user-avatar-lg img {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.db-user-info-text h3 { margin: 0; font-size: 15px; color: #333; }
+.db-user-info-text p { margin: 2px 0 0; font-size: 12px; color: #888; }
+
+.db-profile-nav-list {
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.db-profile-nav-list li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.db-profile-nav-list li a:hover {
+    background: #f4f4f4;
+    color: #FF5B1E;
+}
+
+.db-logout-footer {
+    padding: 15px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.db-logout-action-btn {
+    background: #FFF5F5;
+    color: #F1416C;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.db-logout-action-btn:hover {
+    background: #F1416C;
+    color: white;
+}
+
+@keyframes db-popIn-anim {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
 
 /* --- Details Card --- */
 .details-card {

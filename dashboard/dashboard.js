@@ -253,3 +253,60 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+
+//notification and profile toggle logic
+/* --- TOGGLE NOTIFICATIONS --- */
+function db_toggleNotifications() {
+    const notifDropdown = document.getElementById('db-notification-menu');
+    const notifBtn = document.querySelector('.db-notif-trigger-btn');
+    
+    // Close profile if it's currently open
+    db_closeProfile();
+
+    // Toggle visibility class
+    notifDropdown.classList.toggle('db-show-menu');
+    notifBtn.classList.toggle('db-active-state');
+}
+
+/* --- TOGGLE PROFILE --- */
+function db_toggleProfile() {
+    const profileDropdown = document.getElementById('db-profile-menu');
+    const profileBtn = document.querySelector('.db-profile-trigger-btn');
+
+    // Close notifications if currently open
+    db_closeNotifications();
+
+    // Toggle visibility class
+    profileDropdown.classList.toggle('db-show-menu');
+    profileBtn.classList.toggle('db-active-state');
+}
+
+/* --- HELPER FUNCTIONS --- */
+function db_closeNotifications() {
+    document.getElementById('db-notification-menu').classList.remove('db-show-menu');
+    document.querySelector('.db-notif-trigger-btn').classList.remove('db-active-state');
+}
+
+function db_closeProfile() {
+    document.getElementById('db-profile-menu').classList.remove('db-show-menu');
+    document.querySelector('.db-profile-trigger-btn').classList.remove('db-active-state');
+}
+
+/* --- LOGOUT LOGIC --- */
+function db_logoutUser() {
+    // 1. Clear session/local storage
+    // localStorage.removeItem('userToken');
+    
+    // 2. Redirect
+    window.location.href = '../employee_login/emp_login.html'; 
+}
+
+/* --- CLOSE MENUS WHEN CLICKING OUTSIDE --- */
+window.onclick = function(event) {
+    // Check if the click is NOT inside a widget wrapper
+    if (!event.target.closest('.db-widget-wrapper')) {
+        db_closeNotifications();
+        db_closeProfile();
+    }
+}
